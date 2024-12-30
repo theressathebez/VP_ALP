@@ -1,5 +1,6 @@
 package com.example.vp_alp
 
+import StudyScroll
 import StudyView
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,7 +14,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             VP_ALPTheme {
-                StudyView()
+                StudyScroll()
             }
         }
     }

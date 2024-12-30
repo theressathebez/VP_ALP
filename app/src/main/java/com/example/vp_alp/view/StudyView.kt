@@ -3,6 +3,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -18,8 +20,112 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.vp_alp.R
 import com.example.vp_alp.ui.theme.VP_ALPTheme
+
+@Composable
+fun StudyScroll() {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        item {
+            StudyView()
+        }
+
+        item {
+            LazyRow(
+                modifier = Modifier
+                    .padding(vertical = 8.dp, horizontal = 16.dp)
+            ) {
+                val categories = listOf("Perkenalan", "Keluarga", "Sekolah", "Pekerjaan", "Perasaan")
+                items(categories.size) { index ->
+                    CatView(categoryName = categories[index])
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+            }
+        }
+
+        items(10) { index ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 8.dp), // Tambahkan padding horizontal
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                // Kotak pertama
+                TopicView(title = "Topic ${(index * 2) + 1}", duration = "10 mins")
+                Spacer(modifier = Modifier.width(8.dp))
+                // Kotak kedua
+                TopicView(title = "Topic ${(index * 2) + 2}", duration = "15 mins")
+            }
+        }
+    }
+}
+
+@Composable
+fun CatView(categoryName: String) {
+    Box(
+        modifier = Modifier
+            .size(width = 100.dp, height = 40.dp)
+            .background(
+                color = Color(0xFFFFA726),
+                shape = RoundedCornerShape(30.dp)
+            ), contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = categoryName,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White
+        )
+    }
+}
+
+@Composable
+fun TopicView(
+    title: String,
+    duration: String
+) {
+    Box(
+        modifier = Modifier
+            .background(
+                color = Color(0xFFF7ECFF),
+                shape = RoundedCornerShape(15.dp)
+            )
+            .border(
+                border = BorderStroke(1.dp, Color(0xFFA35FED)),
+                shape = RoundedCornerShape(15.dp)
+            )
+            .padding(16.dp)
+    ) {
+        Column {
+            Text(
+                text = title,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                text = duration,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.Gray
+            )
+
+            Image(
+                painter = painterResource(id = R.drawable.frame),
+                contentDescription = "Lesson Image",
+                modifier = Modifier
+                    .size(120.dp)
+                    .offset(y = 18.dp)
+            )
+
+        }
+    }
+}
 
 @Composable
 fun StudyView(
@@ -59,7 +165,7 @@ fun StudyView(
             Box(
                 modifier = Modifier
                     .background(
-                        color = Color(0xFFFFA726), // Orange color
+                        color = Color(0xFFFFA726),
                         shape = RoundedCornerShape(30.dp)
                     )
                     .padding(horizontal = 12.dp, vertical = 6.dp),
@@ -234,10 +340,11 @@ fun StudyView(
     }
 }
 
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun MovieCardPreview() {
     VP_ALPTheme {
-        StudyView()
+        StudyScroll()
     }
 }

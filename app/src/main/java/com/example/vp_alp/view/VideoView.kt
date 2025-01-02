@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,22 +40,22 @@ import androidx.navigation.NavController
 
 @Composable
 fun VideoView(
-    topicId: Int,
+    videoId: Int,
     navController: NavController,
     viewModel: StudyViewModel = viewModel(),
     onClick: () -> Unit
 ) {
-    val videos by viewModel.videos.collectAsState()
+    val selectedVideo by viewModel.selectedVideo.collectAsState()
 
-    LaunchedEffect(topicId) {
-        viewModel.fetchVideosByTopicId(topicId)
+    LaunchedEffect(videoId) {
+        viewModel.fetchVideoById(videoId)
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(16.dp)
+            .padding(horizontal = 16.dp, vertical = 40.dp)
     ) {
         Icon(
             imageVector = Icons.Default.Close,
@@ -63,76 +64,84 @@ fun VideoView(
             modifier = Modifier
                 .size(36.dp)
                 .align(Alignment.Start)
+                .clickable {
+                    navController.popBackStack()
+                }
         )
 
-        Image(
-            painter = painterResource(id = R.drawable.group_369),
-            contentDescription = "Profile Picture",
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 14.dp)
-                .height(300.dp)
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-                .background(
-                    color = Color(0xFFF7ECFF), shape = RoundedCornerShape(15.dp)
-                )
-                .border(
-                    border = BorderStroke(1.dp, Color(0xFFA35FED)),
-                    shape = RoundedCornerShape(15.dp)
-                )
-                .padding(16.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Star,
-                contentDescription = "Star Icon",
-                tint = Color(0xFFFFD664),
+        selectedVideo?.let { video ->
+            Image(
+                painter = painterResource(id = R.drawable.group_369),
+                contentDescription = "Profile Picture",
                 modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .size(34.dp)
+                    .fillMaxWidth()
+                    .padding(vertical = 14.dp)
+                    .height(300.dp)
             )
 
-            Text(
-                text = "Senang bertemu denganmu",
-                fontSize = 18.sp,
-                color = Color.Black,
-                modifier = Modifier.align(Alignment.Center)
-            )
-
-            Icon(
-                imageVector = Icons.Default.ArrowForward,
-                contentDescription = "Arrow Right",
-                tint = Color.White,
+            Box(
                 modifier = Modifier
-                    .size(34.dp)
+                    .fillMaxWidth()
+                    .height(250.dp)
                     .background(
-                        color = Color(0xFFA35FEC), shape = RoundedCornerShape(50)
+                        color = Color(0xFFF7ECFF), shape = RoundedCornerShape(15.dp)
                     )
-                    .padding(4.dp)
-                    .align(Alignment.BottomEnd)
-            )
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 26.dp)
-                .background(
-                    color = Color(0xFFA35FEC), shape = RoundedCornerShape(30.dp)
+                    .border(
+                        border = BorderStroke(1.dp, Color(0xFFA35FED)),
+                        shape = RoundedCornerShape(15.dp)
+                    )
+                    .padding(16.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = "Star Icon",
+                    tint = Color(0xFFFFD664),
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .size(34.dp)
                 )
-                .padding(horizontal = 12.dp, vertical = 12.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Selanjutnya",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.White
-            )
+
+                Text(
+                    text = video.title,
+                    fontSize = 18.sp,
+                    color = Color.Black,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+
+                Icon(
+                    imageVector = Icons.Default.ArrowForward,
+                    contentDescription = "Arrow Right",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .size(34.dp)
+                        .background(
+                            color = Color(0xFFA35FEC), shape = RoundedCornerShape(50)
+                        )
+                        .padding(4.dp)
+                        .align(Alignment.BottomEnd)
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 26.dp)
+                    .background(
+                        color = Color(0xFFA35FEC), shape = RoundedCornerShape(30.dp)
+                    )
+                    .padding(horizontal = 12.dp, vertical = 12.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Selanjutnya",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.White
+                )
+            }
+        } ?: run {
+            // Menampilkan loading atau pesan bahwa video tidak ditemukan
+            Text(text = "Video tidak ditemukan", color = Color.Gray)
         }
     }
 }

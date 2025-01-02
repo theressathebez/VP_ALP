@@ -32,27 +32,30 @@ fun AppRouting() {
             StudyScroll(navController = navController)
         }
 
-        composable("topicScroll/{categoryId}") { backStackEntry ->
-            val categoryId = backStackEntry.arguments?.getString("categoryId")?.toInt() ?: 0
-            TopicScroll(
-                categoryId = categoryId,
-                navController = navController,
+        composable(
+            "topicScroll/{topicId}",
+            arguments = listOf(navArgument("topicId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val topicId = backStackEntry.arguments?.getInt("topicId") ?: 0
+            TopicScroll(topicId = topicId, navController = navController,
                 onClick = {
                     navController.popBackStack()
                 }
             )
         }
 
-        composable("videoView/{topicId}") { backStackEntry ->
-            val topicId = backStackEntry.arguments?.getString("topicId")?.toInt() ?: 0
+        composable(
+            "videoView/{videoId}",
+            arguments = listOf(navArgument("videoId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val videoId = backStackEntry.arguments?.getInt("videoId") ?: 0
             VideoView(
-                topicId = topicId,  // Pastikan menggunakan topicId di sini
+                videoId = videoId,
                 navController = navController,
                 onClick = {
                     navController.popBackStack()
                 }
             )
         }
-
     }
 }

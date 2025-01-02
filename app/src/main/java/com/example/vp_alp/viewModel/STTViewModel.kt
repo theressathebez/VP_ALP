@@ -23,21 +23,26 @@ class STTViewModel : ViewModel() {
         speechResultLauncher = launcher
     }
 
-    fun askSpeechInput(context: Context) {
+    fun askSpeechInput(context: Context, activity: Activity) {
         if (!SpeechRecognizer.isRecognitionAvailable(context)) {
             Toast.makeText(context, "Speech not Available", Toast.LENGTH_SHORT).show()
         } else {
-            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH)
-                putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.US)
-                putExtra(RecognizerIntent.EXTRA_PROMPT, "Talk Something")
-            }
-            speechResultLauncher?.launch(intent)
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            intent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH
+            )
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.US)
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Talk Something")
+
+            (context as Activity).startActivityForResult(intent, 102)
         }
     }
 
-    fun handleActivityResult(data: Intent?) {
-        val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-        _text.value = result?.get(0).toString()
+    fun handleActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 102 && resultCode == Activity.RESULT_OK) {
+            val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            _text.value = result?.get(0).toString()
+        }
     }
 }

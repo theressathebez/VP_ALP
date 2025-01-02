@@ -1,5 +1,6 @@
 package com.example.vp_alp.view
 
+import android.app.Activity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,7 +37,10 @@ import com.example.vp_alp.R
 import com.example.vp_alp.viewModel.STTViewModel
 
 @Composable
-fun STTView(viewModel: STTViewModel = viewModel()) {
+fun STTView(
+    viewModel: STTViewModel = viewModel(),
+    activity: Activity
+) {
     val text by viewModel.text.collectAsState()
     val context = LocalContext.current
     Column(
@@ -153,7 +157,7 @@ fun STTView(viewModel: STTViewModel = viewModel()) {
                 .clip(shape = RoundedCornerShape(50)) // Make the Box circular
                 .background(color = Color(0xFFDDE4FB)) // Circle color
                 .clickable {
-                    viewModel.askSpeechInput(context)
+                    viewModel.askSpeechInput(context, activity)
                 },
             contentAlignment = Alignment.Center
         ) {
@@ -166,10 +170,3 @@ fun STTView(viewModel: STTViewModel = viewModel()) {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun STTPreview() {
-    VP_ALPTheme {
-        STTView()
-    }
-}

@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
 
     private val speechResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
-            viewModel.handleActivityResult(result.data)
+            viewModel.handleActivityResult(102, result.resultCode, result.data)
         }
     }
 
@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
         viewModel.setSpeechResultLauncher(speechResultLauncher)
         setContent {
             VP_ALPTheme {
-                STTView(viewModel = viewModel)
+                STTView(viewModel = viewModel, activity = this)
             }
         }
     }

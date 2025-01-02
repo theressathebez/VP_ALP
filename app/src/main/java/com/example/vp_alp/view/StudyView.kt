@@ -28,6 +28,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,7 +42,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.vp_alp.R
-import com.example.vp_alp.route.listScreen
 import com.example.vp_alp.ui.theme.VP_ALPTheme
 import com.example.vp_alp.viewmodel.StudyViewModel
 
@@ -50,6 +52,8 @@ fun StudyScroll(
 ) {
     val categories by viewModel.categories.collectAsState()
     val topics by viewModel.topics.collectAsState()
+
+    var selectedCategoryId by remember { mutableStateOf<Int?>(null) }
 
     LazyColumn(
         modifier = Modifier
@@ -67,10 +71,15 @@ fun StudyScroll(
                     .padding(vertical = 8.dp, horizontal = 16.dp)
             ) {
                 items(categories) { category ->
-                    CatList(categoryName = category.name) {
-                        // On click, fetch topics by category
-                        viewModel.fetchTopicsByCategoryId(category.id)
-                    }
+                    CatList(
+                        categoryName = category.name,
+                        isSelected = category.id == selectedCategoryId,
+                        onClick = {
+                            // Set selected category and fetch topics
+                            selectedCategoryId = category.id
+                            viewModel.fetchTopicsByCategoryId(category.id)
+                        }
+                    )
                 }
             }
         }
@@ -81,7 +90,7 @@ fun StudyScroll(
                     .fillMaxWidth()
                     .padding(16.dp)
                     .clickable {
-                        navController.navigate("topicScroll/${topic.categoryId}")
+                        navController.navigate("topicScroll/${topic.id}")
                     },
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -94,13 +103,14 @@ fun StudyScroll(
 @Composable
 fun CatList(
     categoryName: String,
+    isSelected: Boolean,
     onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .size(width = 100.dp, height = 40.dp)
             .background(
-                color = Color(0xFFFFA726),
+                color = if (isSelected) Color(0xFFFFA726) else Color.LightGray,
                 shape = RoundedCornerShape(30.dp)
             )
             .clickable(onClick = onClick),

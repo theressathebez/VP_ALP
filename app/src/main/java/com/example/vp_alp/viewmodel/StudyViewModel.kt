@@ -24,6 +24,10 @@ class StudyViewModel : ViewModel() {
     private val _videos = MutableStateFlow<List<Video>>(emptyList())
     val videos: StateFlow<List<Video>> = _videos
 
+    private val _selectedVideo = MutableStateFlow<Video?>(null)
+    val selectedVideo: StateFlow<Video?> = _selectedVideo
+
+
     init {
         loadCategories()
     }
@@ -45,4 +49,11 @@ class StudyViewModel : ViewModel() {
             _videos.value = repository.getVideosByTopicId(topicId)
         }
     }
+
+    fun fetchVideoById(videoId: Int) {
+        viewModelScope.launch {
+            _selectedVideo.value = repository.getVideoById(videoId)
+        }
+    }
+
 }

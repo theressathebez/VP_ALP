@@ -33,26 +33,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.vp_alp.R
 import com.example.vp_alp.ui.theme.VP_ALPTheme
 import com.example.vp_alp.viewmodel.StudyViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.vp_alp.model.Video
 
 
 @Composable
 fun TopicScroll(
-    categoryId: Int,
+    topicId: Int,
     navController: NavController,
     viewModel: StudyViewModel = viewModel(),
     onClick: () -> Unit
 ) {
-    val topics by viewModel.topics.collectAsState()
     val videos by viewModel.videos.collectAsState()
 
-    LaunchedEffect(categoryId) {
-        viewModel.fetchTopicsByCategoryId(categoryId)
+    LaunchedEffect(topicId) {
+        viewModel.fetchVideosByTopicId(topicId)
     }
 
     Column(
@@ -60,22 +58,22 @@ fun TopicScroll(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        // Arrow Back Header
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 20.dp),
+                .padding(horizontal = 16.dp, vertical = 40.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
+            Icon(imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Back",
                 tint = Color.Black,
                 modifier = Modifier
                     .size(36.dp)
                     .padding(end = 8.dp)
-                    .clickable(onClick = onClick)
-            )
+                    .clickable {
+                        navController.popBackStack()
+
+                    })
             Text(
                 text = "Kembali",
                 fontSize = 18.sp,
@@ -86,7 +84,7 @@ fun TopicScroll(
 
         // Topic Content
         LazyColumn(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(videos) { video ->
@@ -105,20 +103,17 @@ fun TopicScroll(
 
 @Composable
 fun TopicView(
-    title: String,
-    description: String,
-    onClick: () -> Unit
+    title: String, description: String, onClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable(onClick = onClick)
             .background(
-                color = Color(0xFFE9F5FF),
-                shape = RoundedCornerShape(15.dp)
+                color = Color(0xFFE9F5FF), shape = RoundedCornerShape(15.dp)
             )
             .border(
-                border = BorderStroke(1.dp, Color(0xFFB2DAFF)),
-                shape = RoundedCornerShape(15.dp)
+                border = BorderStroke(1.dp, Color(0xFFB2DAFF)), shape = RoundedCornerShape(15.dp)
             )
             .padding(12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -138,15 +133,10 @@ fun TopicView(
                 .padding(horizontal = 16.dp)
         ) {
             Text(
-                text = title,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Normal,
-                color = Color.Gray
+                text = title, fontSize = 14.sp, fontWeight = FontWeight.Normal, color = Color.Gray
             )
             Text(
-                text =description,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold
+                text = description, fontSize = 18.sp, fontWeight = FontWeight.SemiBold
             )
         }
 
@@ -154,11 +144,9 @@ fun TopicView(
         Box(
             modifier = Modifier
                 .background(
-                    color = Color(0xFF3AAFFE),
-                    shape = RoundedCornerShape(30.dp)
+                    color = Color(0xFF3AAFFE), shape = RoundedCornerShape(30.dp)
                 )
-                .padding(horizontal = 4.dp, vertical = 4.dp),
-            contentAlignment = Alignment.Center
+                .padding(horizontal = 4.dp, vertical = 4.dp), contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowForward,

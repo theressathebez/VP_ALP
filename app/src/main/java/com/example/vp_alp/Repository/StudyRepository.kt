@@ -27,9 +27,9 @@ class StudyRepository {
     )
 
     private val videos = listOf(
-        Video(1, 1, "Video 1", "Intro to Topic 1", "https://example.com/video1"),
-        Video(2, 1, "Video 2", "Intro to Topic 2", "https://example.com/video2"),
-        Video(3, 2, "Video 3", "Intro to Topic 3", "https://example.com/video3"),
+        Video(1, 1, "Video 1", "Intro to Topic 1", "https://www.youtube.com/watch?v=qOD9M95_fS0"),
+        Video(2, 2, "Video 2", "Intro to Topic 2", "https://example.com/video2"),
+        Video(3, 1, "Video 3", "Intro to Topic 3", "https://example.com/video3"),
         Video(4, 3, "Video 4", "Intro to Topic 4", "https://example.com/video4")
     )
 
@@ -41,5 +41,9 @@ class StudyRepository {
 
     fun getVideosByTopicId(topicId: Int): List<Video> {
         return videos.filter { it.topicId == topicId }
+    }
+
+    fun getVideoById(videoId: Int): Video? {
+        return videos.find { it.id == videoId }
     }
 }

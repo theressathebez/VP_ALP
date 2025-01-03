@@ -142,11 +142,14 @@ fun STTView(
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.baseline_delete_outline_24),
-                    contentDescription = "back",
+                    contentDescription = "delete",
                     modifier = Modifier
                         .padding(16.dp)
                         .width(30.dp)
                         .height(30.dp)
+                        .clickable {
+                            viewModel.clearText()
+                        }
                 )
             }
         }
@@ -157,7 +160,7 @@ fun STTView(
                 .clip(shape = RoundedCornerShape(50)) // Make the Box circular
                 .background(color = Color(0xFFDDE4FB)) // Circle color
                 .clickable {
-                    viewModel.askSpeechInput(context, activity)
+                    viewModel.askSpeechInput(context)
                 },
             contentAlignment = Alignment.Center
         ) {
@@ -169,4 +172,3 @@ fun STTView(
         }
     }
 }
-

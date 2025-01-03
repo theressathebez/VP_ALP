@@ -23,7 +23,7 @@ class STTViewModel : ViewModel() {
         speechResultLauncher = launcher
     }
 
-    fun askSpeechInput(context: Context, activity: Activity) {
+    fun askSpeechInput(context: Context) {
         if (!SpeechRecognizer.isRecognitionAvailable(context)) {
             Toast.makeText(context, "Speech not Available", Toast.LENGTH_SHORT).show()
         } else {
@@ -35,7 +35,7 @@ class STTViewModel : ViewModel() {
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.US)
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Talk Something")
 
-            (context as Activity).startActivityForResult(intent, 102)
+            speechResultLauncher?.launch(intent)
         }
     }
 
@@ -45,4 +45,9 @@ class STTViewModel : ViewModel() {
             _text.value = result?.get(0).toString()
         }
     }
+
+    fun clearText() {
+        _text.value = ""
+    }
+
 }

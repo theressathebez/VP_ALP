@@ -1,4 +1,4 @@
-package com.example.vp_alp.viewModel
+package com.example.vp_alp.viewmodel
 
 import android.app.Activity
 import android.content.Context

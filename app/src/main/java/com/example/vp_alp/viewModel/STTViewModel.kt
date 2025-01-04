@@ -50,4 +50,7 @@ class STTViewModel : ViewModel() {
         _text.value = ""
     }
 
+    fun hasSavedTexts(): Boolean {
+        return _text.value.isNotEmpty()
+    }
 }

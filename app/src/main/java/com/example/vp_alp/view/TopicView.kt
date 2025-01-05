@@ -39,7 +39,7 @@ import com.example.vp_alp.R
 import com.example.vp_alp.ui.theme.VP_ALPTheme
 import com.example.vp_alp.viewmodel.StudyViewModel
 
-
+//
 @Composable
 fun TopicScroll(
     topicId: Int,

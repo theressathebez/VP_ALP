@@ -14,11 +14,12 @@ import com.example.vp_alp.route.AppRouting
 class MainActivity : ComponentActivity() {
     private lateinit var viewModel: STTViewModel
 
-    private val speechResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            viewModel.handleActivityResult(102, result.resultCode, result.data)
+    private val speechResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                viewModel.handleActivityResult(102, result.resultCode, result.data)
+            }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +27,8 @@ class MainActivity : ComponentActivity() {
         viewModel.setSpeechResultLauncher(speechResultLauncher)
         setContent {
             VP_ALPTheme {
-                STTView(viewModel = viewModel, activity = this),
-                AppRouting() 
+                STTView(viewModel = viewModel, activity = this)
+                AppRouting()
             }
         }
     }

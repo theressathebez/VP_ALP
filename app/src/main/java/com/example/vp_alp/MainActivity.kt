@@ -8,7 +8,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import com.example.vp_alp.ui.theme.VP_ALPTheme
 import com.example.vp_alp.view.STTView
-import com.example.vp_alp.viewModel.STTViewModel
+import com.example.vp_alp.viewmodel.STTViewModel
+import com.example.vp_alp.route.AppRouting
 
 class MainActivity : ComponentActivity() {
     private lateinit var viewModel: STTViewModel
@@ -25,7 +26,7 @@ class MainActivity : ComponentActivity() {
         viewModel.setSpeechResultLauncher(speechResultLauncher)
         setContent {
             VP_ALPTheme {
-                STTView(viewModel = viewModel, activity = this)
+                STTView(viewModel = viewModel, activity = this),
                 AppRouting() 
             }
         }

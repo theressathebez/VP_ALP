@@ -43,9 +43,7 @@ import com.example.vp_alp.R
 fun LoginView() {
     var username by remember { mutableStateOf("") }
 
-    Column (
-
-    ) {
+    Column {
         Box {
             Image(
                 painter = painterResource(id = R.drawable.background3),
@@ -91,7 +89,7 @@ fun LoginView() {
                 shadowElevation = 15.dp,
                 shape = RoundedCornerShape(25.dp),
                 modifier = Modifier
-                    .padding(start = 20.dp, top = 430.dp, bottom = 25.dp)
+                    .padding(start = 19.dp, top = 430.dp, bottom = 25.dp)
             ) {
                 Box (
                     modifier = Modifier

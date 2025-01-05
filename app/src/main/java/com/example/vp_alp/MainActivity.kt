@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             VP_ALPTheme {
-                AppRouting()
+                AppRouting() 
             }
         }
     }

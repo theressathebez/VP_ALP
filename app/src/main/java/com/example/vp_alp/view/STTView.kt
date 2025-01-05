@@ -28,13 +28,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.vp_alp.ui.theme.VP_ALPTheme
 import com.example.vp_alp.R
-import com.example.vp_alp.viewModel.STTViewModel
+import com.example.vp_alp.viewmodel.STTViewModel
 
 @Composable
 fun STTView(

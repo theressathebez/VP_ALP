@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             VP_ALPTheme {
                 STTView(viewModel = viewModel, activity = this)
+                AppRouting() 
             }
         }
     }

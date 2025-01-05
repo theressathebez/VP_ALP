@@ -45,8 +45,6 @@ fun ProfileView() {
                     .height(745.dp)
                     .offset(y = (-2).dp)
             )
-
-
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
@@ -60,7 +58,6 @@ fun ProfileView() {
                             .size(105.dp)
                             .offset(y = (107.dp))
                     )
-
                 }
                 Surface (
                     shadowElevation = 5.dp,
@@ -75,148 +72,153 @@ fun ProfileView() {
                             .width(355.dp)
                             .height(550.dp)
                     ) {
-                        Column (
+                        Box (
                             modifier = Modifier
-                                .fillMaxSize()
-                                .offset(y = 62.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                                .fillMaxHeight()
                         ) {
-                            Text(
-                                "Leon Smith",
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                            Row (
-                                modifier = Modifier
-                                    .padding(start = 35.dp)
-                                    .offset(y = (-2.dp))
-                            ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.frame_370),
-                                    contentDescription = "frame_370",
-                                    modifier = Modifier
-                                        .size(65.dp)
-                                        .offset(y = (-20.dp))
-                                )
-                                Text(
-                                    "Beginner",
-                                    fontSize = 8.sp,
-                                    color = Color.White,
-                                    modifier = Modifier
-                                        .padding(top = 8.dp)
-                                        .offset(x = (-48.dp))
-                                )
-                            }
-                            Image(
-                                painter = painterResource(id = R.drawable.line_1),
-                                contentDescription = "line_1",
-                                modifier = Modifier
-                                    .size(355.dp)
-                                    .offset(y = (-215.dp))
-                            )
                             Column (
                                 modifier = Modifier
-                                    .fillMaxHeight()
-                                    .offset(y = 20.dp)
+                                    .fillMaxSize()
+                                    .offset(y = 62.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
+                                Text(
+                                    "Leon Smith",
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                )
                                 Row (
                                     modifier = Modifier
-                                        .padding(bottom = 10.dp)
+                                        .padding(start = 35.dp)
+                                        .offset(y = (-2.dp))
+                                ) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.frame_370),
+                                        contentDescription = "frame_370",
+                                        modifier = Modifier
+                                            .size(65.dp)
+                                            .offset(y = (-20.dp))
+                                    )
+                                    Text(
+                                        "Beginner",
+                                        fontSize = 8.sp,
+                                        color = Color.White,
+                                        modifier = Modifier
+                                            .padding(top = 8.dp)
+                                            .offset(x = (-48.dp))
+                                    )
+                                }
+                                Image(
+                                    painter = painterResource(id = R.drawable.line_1),
+                                    contentDescription = "line_1",
+                                    modifier = Modifier
+                                        .size(355.dp)
+                                        .offset(y = (-215.dp))
+                                )
+                                Column (
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .offset(y = 20.dp)
                                 ) {
                                     Row (
                                         modifier = Modifier
-                                            .offset(x = (10.dp), y = (-380.dp))
-                                            .width(300.dp)
+                                            .padding(bottom = 10.dp)
                                     ) {
+                                        Row (
+                                            modifier = Modifier
+                                                .offset(x = (10.dp), y = (-380.dp))
+                                                .width(300.dp)
+                                        ) {
+                                            Image(
+                                                painter = painterResource(id = R.drawable.account),
+                                                contentDescription = "account",
+                                                modifier = Modifier
+                                                    .size(30.dp)
+                                            )
+                                            Text(
+                                                "Account",
+                                                fontSize = 18.sp,
+                                                fontWeight = FontWeight.Medium,
+                                                color = Color(0xFF666666),
+                                                modifier = Modifier
+                                                    .padding(top = 5.dp, start = 15.dp)
+                                            )
+                                        }
                                         Image(
-                                            painter = painterResource(id = R.drawable.account),
-                                            contentDescription = "account",
+                                            painter = painterResource(id = R.drawable.arrow_right),
+                                            contentDescription = "arrow_right",
                                             modifier = Modifier
-                                                .size(30.dp)
-                                        )
-                                        Text(
-                                            "Account",
-                                            fontSize = 18.sp,
-                                            fontWeight = FontWeight.Medium,
-                                            color = Color(0xFF666666),
-                                            modifier = Modifier
-                                                .padding(top = 5.dp, start = 15.dp)
+                                                .size(25.dp)
+                                                .offset(y = (-380.dp))
                                         )
                                     }
-                                    Image(
-                                        painter = painterResource(id = R.drawable.arrow_right),
-                                        contentDescription = "arrow_right",
+                                    Row (
                                         modifier = Modifier
-                                            .size(25.dp)
-                                            .offset(y = (-380.dp))
-                                    )
-                                }
-                                Row (
-                                    modifier = Modifier
-                                        .padding(bottom = 10.dp)
-                                ) {
-                                    Row(
-                                        modifier = Modifier
-                                            .offset(x = (10.dp), y = (-370.dp))
-                                            .width(300.dp)
+                                            .padding(bottom = 10.dp)
                                     ) {
+                                        Row(
+                                            modifier = Modifier
+                                                .offset(x = (10.dp), y = (-370.dp))
+                                                .width(300.dp)
+                                        ) {
+                                            Image(
+                                                painter = painterResource(id = R.drawable.flashcard),
+                                                contentDescription = "flashcard",
+                                                modifier = Modifier
+                                                    .size(30.dp)
+                                            )
+                                            Text(
+                                                "Flashcard",
+                                                fontSize = 18.sp,
+                                                fontWeight = FontWeight.Medium,
+                                                color = Color(0xFF666666),
+                                                modifier = Modifier
+                                                    .padding(top = 4.dp, start = 15.dp)
+                                            )
+                                        }
                                         Image(
-                                            painter = painterResource(id = R.drawable.flashcard),
-                                            contentDescription = "flashcard",
+                                            painter = painterResource(id = R.drawable.arrow_right),
+                                            contentDescription = "arrow_right",
                                             modifier = Modifier
-                                                .size(30.dp)
-                                        )
-                                        Text(
-                                            "Flashcard",
-                                            fontSize = 18.sp,
-                                            fontWeight = FontWeight.Medium,
-                                            color = Color(0xFF666666),
-                                            modifier = Modifier
-                                                .padding(top = 4.dp, start = 15.dp)
+                                                .size(25.dp)
+                                                .offset(y = (-370.dp))
                                         )
                                     }
-                                    Image(
-                                        painter = painterResource(id = R.drawable.arrow_right),
-                                        contentDescription = "arrow_right",
-                                        modifier = Modifier
-                                            .size(25.dp)
-                                            .offset(y = (-370.dp))
-                                    )
-                                }
-                                Row (
+                                    Row (
 
-                                ) {
-                                    Row (
-                                        modifier = Modifier
-                                            .offset(x = (10.dp), y = (-360.dp))
-                                            .width(300.dp)
                                     ) {
+                                        Row (
+                                            modifier = Modifier
+                                                .offset(x = (10.dp), y = (-360.dp))
+                                                .width(300.dp)
+                                        ) {
+                                            Image(
+                                                painter = painterResource(id = R.drawable.logout),
+                                                contentDescription = "logout",
+                                                modifier = Modifier
+                                                    .size(30.dp)
+                                            )
+                                            Text(
+                                                "Log Out",
+                                                fontSize = 18.sp,
+                                                fontWeight = FontWeight.Medium,
+                                                color = Color(0xFF666666),
+                                                modifier = Modifier
+                                                    .padding(top = 3.dp, start = 15.dp)
+                                            )
+                                        }
                                         Image(
-                                            painter = painterResource(id = R.drawable.logout),
-                                            contentDescription = "logout",
+                                            painter = painterResource(id = R.drawable.arrow_right),
+                                            contentDescription = "arrow_right",
                                             modifier = Modifier
-                                                .size(30.dp)
-                                        )
-                                        Text(
-                                            "Log Out",
-                                            fontSize = 18.sp,
-                                            fontWeight = FontWeight.Medium,
-                                            color = Color(0xFF666666),
-                                            modifier = Modifier
-                                                .padding(top = 3.dp, start = 15.dp)
+                                                .size(25.dp)
+                                                .offset(y = (-360.dp))
                                         )
                                     }
-                                    Image(
-                                        painter = painterResource(id = R.drawable.arrow_right),
-                                        contentDescription = "arrow_right",
-                                        modifier = Modifier
-                                            .size(25.dp)
-                                            .offset(y = (-360.dp))
-                                    )
+
                                 }
 
                             }
-
                         }
                     }
                 }

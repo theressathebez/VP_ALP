@@ -5,7 +5,7 @@ import com.example.vp_alp.model.Topic
 import com.example.vp_alp.model.Video
 
 class StudyRepository {
-    // Dummy Data
+    //dummy
     private val categories = listOf(
         Category(1, "Perkenalan"),
         Category(2, "Keluarga"),

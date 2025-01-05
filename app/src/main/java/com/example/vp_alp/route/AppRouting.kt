@@ -10,7 +10,6 @@ import androidx.navigation.navArgument
 import com.example.vp_alp.view.TopicScroll
 import com.example.vp_alp.view.VideoView
 
-//
 enum class listScreen {
     Study,
     Topic,

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -43,6 +44,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.vp_alp.R
 import com.example.vp_alp.ui.theme.VP_ALPTheme
+import com.example.vp_alp.view.BottomNavigationBar
 import com.example.vp_alp.viewmodel.StudyViewModel
 
 //Study
@@ -56,48 +58,63 @@ fun StudyScroll(
 
     var selectedCategoryId by remember { mutableStateOf<Int?>(null) }
 
-    LazyColumn(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(horizontal = 4.dp, vertical = 16.dp)
     ) {
-        item {
-            StudyView()
-        }
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .background(Color.White)
+                .padding(horizontal = 4.dp, vertical = 16.dp)
+        ) {
+            item {
+                StudyView()
+            }
 
-        item {
-            LazyRow(
-                modifier = Modifier
-                    .padding(vertical = 8.dp, horizontal = 16.dp)
-            ) {
-                items(categories) { category ->
-                    CatList(
-                        categoryName = category.name,
-                        isSelected = category.id == selectedCategoryId,
-                        onClick = {
-                            // Set selected category and fetch topics
-                            selectedCategoryId = category.id
-                            viewModel.fetchTopicsByCategoryId(category.id)
-                        }
-                    )
+            item {
+                LazyRow(
+                    modifier = Modifier
+                        .padding(vertical = 8.dp, horizontal = 16.dp)
+                ) {
+                    items(categories) { category ->
+                        CatList(
+                            categoryName = category.name,
+                            isSelected = category.id == selectedCategoryId,
+                            onClick = {
+                                // Set selected category and fetch topics
+                                selectedCategoryId = category.id
+                                viewModel.fetchTopicsByCategoryId(category.id)
+                            }
+                        )
+                    }
+                }
+            }
+
+            items(topics) { topic ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .clickable {
+                            navController.navigate("topicScroll/${topic.id}")
+                        },
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    TopicList(title = topic.title, duration = topic.duration)
                 }
             }
         }
 
-        items(topics) { topic ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .clickable {
-                        navController.navigate("topicScroll/${topic.id}")
-                    },
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                TopicList(title = topic.title, duration = topic.duration)
-            }
-        }
+        BottomNavigationBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(bottom = 16.dp)
+                .navigationBarsPadding(),
+            currentScreen = "study"
+        )
     }
 }
 

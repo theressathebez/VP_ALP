@@ -49,7 +49,7 @@ fun TopicScroll(
     val videos by viewModel.videos.collectAsState()
 
     LaunchedEffect(topicId) {
-        viewModel.fetchVideosByTopicId(topicId)
+        viewModel.fetchVideos(topicId)
     }
 
     Column(
@@ -89,7 +89,6 @@ fun TopicScroll(
             items(videos) { video ->
                 TopicView(
                     title = video.title,
-                    description = video.description,
                     onClick = {
                         // Navigasi ke VideoView dengan videoId
                         navController.navigate("videoView/${video.id}")
@@ -102,7 +101,7 @@ fun TopicScroll(
 
 @Composable
 fun TopicView(
-    title: String, description: String, onClick: () -> Unit
+    title: String, onClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -133,9 +132,6 @@ fun TopicView(
         ) {
             Text(
                 text = title, fontSize = 14.sp, fontWeight = FontWeight.Normal, color = Color.Gray
-            )
-            Text(
-                text = description, fontSize = 18.sp, fontWeight = FontWeight.SemiBold
             )
         }
 

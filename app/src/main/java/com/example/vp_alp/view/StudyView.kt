@@ -27,7 +27,6 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,17 +45,23 @@ import com.example.vp_alp.R
 import com.example.vp_alp.ui.theme.VP_ALPTheme
 import com.example.vp_alp.view.BottomNavigationBar
 import com.example.vp_alp.viewmodel.StudyViewModel
+import androidx.compose.runtime.LaunchedEffect
+
 
 //Study
 @Composable
 fun StudyScroll(
     viewModel: StudyViewModel = viewModel(),
-    navController: NavController
-) {
-    val categories by viewModel.categories.collectAsState()
-    val topics by viewModel.topics.collectAsState()
+    navController: NavController,
+    ) {
+    val categories = viewModel.categories
+    val topics = viewModel.topics
 
     var selectedCategoryId by remember { mutableStateOf<Int?>(null) }
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchCategories()
+    }
 
     Column(
         modifier = Modifier
@@ -78,31 +83,28 @@ fun StudyScroll(
                     modifier = Modifier
                         .padding(vertical = 8.dp, horizontal = 16.dp)
                 ) {
-                    items(categories) { category ->
+                    items(categories.value) { category ->
                         CatList(
                             categoryName = category.name,
                             isSelected = category.id == selectedCategoryId,
                             onClick = {
                                 // Set selected category and fetch topics
                                 selectedCategoryId = category.id
-                                viewModel.fetchTopicsByCategoryId(category.id)
+                                viewModel.fetchTopics(category.id)
                             }
                         )
                     }
                 }
             }
 
-            items(topics) { topic ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .clickable {
-                            navController.navigate("topicScroll/${topic.id}")
-                        },
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    TopicList(title = topic.title, duration = topic.duration)
+            selectedCategoryId?.let { categoryId ->
+                items(topics.value.filter { it.categoryId == categoryId }) { topic ->
+                    TopicList(
+                        topic_name = topic.topic_name,
+                        onClick = {
+                            navController.navigate("topicView/${topic.id}")
+                        }
+                    )
                 }
             }
         }
@@ -145,8 +147,8 @@ fun CatList(
 
 @Composable
 fun TopicList(
-    title: String,
-    duration: String
+    topic_name: String,
+    onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -160,6 +162,7 @@ fun TopicList(
             )
             .padding(16.dp)
             .fillMaxWidth()
+            .clickable(onClick = onClick)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -169,15 +172,9 @@ fun TopicList(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = title,
+                    text = topic_name,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.SemiBold
-                )
-                Text(
-                    text = duration,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = Color.Gray
                 )
             }
 

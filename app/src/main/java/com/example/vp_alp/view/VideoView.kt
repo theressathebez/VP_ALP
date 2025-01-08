@@ -1,5 +1,6 @@
 package com.example.vp_alp.view
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -45,10 +46,10 @@ fun VideoView(
     viewModel: StudyViewModel = viewModel(),
     onClick: () -> Unit
 ) {
-    val selectedVideo by viewModel.selectedVideo.collectAsState()
+    val video by viewModel.video.collectAsState()
 
     LaunchedEffect(videoId) {
-        viewModel.fetchVideoById(videoId)
+        viewModel.getVideo(videoId)
     }
 
     Column(
@@ -69,80 +70,80 @@ fun VideoView(
                 }
         )
 
-        selectedVideo?.let { video ->
-            Image(
-                painter = painterResource(id = R.drawable.group_369),
-                contentDescription = "Profile Picture",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 14.dp)
-                    .height(300.dp)
-            )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp)
-                    .background(
-                        color = Color(0xFFF7ECFF), shape = RoundedCornerShape(15.dp)
-                    )
-                    .border(
-                        border = BorderStroke(1.dp, Color(0xFFA35FED)),
-                        shape = RoundedCornerShape(15.dp)
-                    )
-                    .padding(16.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    contentDescription = "Star Icon",
-                    tint = Color(0xFFFFD664),
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .size(34.dp)
-                )
-
-                Text(
-                    text = video.title,
-                    fontSize = 18.sp,
-                    color = Color.Black,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-
-                Icon(
-                    imageVector = Icons.Default.ArrowForward,
-                    contentDescription = "Arrow Right",
-                    tint = Color.White,
-                    modifier = Modifier
-                        .size(34.dp)
-                        .background(
-                            color = Color(0xFFA35FEC), shape = RoundedCornerShape(50)
-                        )
-                        .padding(4.dp)
-                        .align(Alignment.BottomEnd)
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 26.dp)
-                    .background(
-                        color = Color(0xFFA35FEC), shape = RoundedCornerShape(30.dp)
-                    )
-                    .padding(horizontal = 12.dp, vertical = 12.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Selanjutnya",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White
-                )
-            }
-        } ?: run {
-            // Menampilkan loading atau pesan bahwa video tidak ditemukan
-            Text(text = "Video tidak ditemukan", color = Color.Gray)
-        }
+//        selectedVideo?.let { video ->
+//            Image(
+//                painter = painterResource(id = R.drawable.group_369),
+//                contentDescription = "Profile Picture",
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(vertical = 14.dp)
+//                    .height(300.dp)
+//            )
+//
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(250.dp)
+//                    .background(
+//                        color = Color(0xFFF7ECFF), shape = RoundedCornerShape(15.dp)
+//                    )
+//                    .border(
+//                        border = BorderStroke(1.dp, Color(0xFFA35FED)),
+//                        shape = RoundedCornerShape(15.dp)
+//                    )
+//                    .padding(16.dp)
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.Star,
+//                    contentDescription = "Star Icon",
+//                    tint = Color(0xFFFFD664),
+//                    modifier = Modifier
+//                        .align(Alignment.TopStart)
+//                        .size(34.dp)
+//                )
+//
+//                Text(
+//                    text = video.title,
+//                    fontSize = 18.sp,
+//                    color = Color.Black,
+//                    modifier = Modifier.align(Alignment.Center)
+//                )
+//
+//                Icon(
+//                    imageVector = Icons.Default.ArrowForward,
+//                    contentDescription = "Arrow Right",
+//                    tint = Color.White,
+//                    modifier = Modifier
+//                        .size(34.dp)
+//                        .background(
+//                            color = Color(0xFFA35FEC), shape = RoundedCornerShape(50)
+//                        )
+//                        .padding(4.dp)
+//                        .align(Alignment.BottomEnd)
+//                )
+//            }
+//
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(top = 26.dp)
+//                    .background(
+//                        color = Color(0xFFA35FEC), shape = RoundedCornerShape(30.dp)
+//                    )
+//                    .padding(horizontal = 12.dp, vertical = 12.dp),
+//                contentAlignment = Alignment.Center
+//            ) {
+//                Text(
+//                    text = "Selanjutnya",
+//                    fontSize = 16.sp,
+//                    fontWeight = FontWeight.SemiBold,
+//                    color = Color.White
+//                )
+//            }
+//        } ?: run {
+//            // Menampilkan loading atau pesan bahwa video tidak ditemukan
+//            Text(text = "Video tidak ditemukan", color = Color.Gray)
+//        }
     }
 }
 

@@ -1,6 +1,7 @@
 package com.example.vp_alp.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -49,11 +50,14 @@ class StudyViewModel(
     var videoDataStatus: StringDataStatusUIState by mutableStateOf(StringDataStatusUIState.Start)
         private set
 
-    private val _categories = MutableStateFlow<List<Category>>(emptyList())
-    val categories: StateFlow<List<Category>> get() = _categories
+    var categoryId by mutableStateOf(0)
+        private set
 
-    private val _topics = MutableStateFlow<List<Topic>>(emptyList())
-    val topics: StateFlow<List<Topic>> get() = _topics
+    private val _categories = mutableStateOf(GetAllCategoriesResponse(emptyList()))
+    val categories: State<GetAllCategoriesResponse> = _categories
+
+    private val _topics = mutableStateOf(GetAllTopicResponse(emptyList()))
+    val topics: State<GetAllTopicResponse> = _topics
 
     private val _videos = MutableStateFlow<List<Video>>(emptyList())
     val videos: StateFlow<List<Video>> get() = _videos
@@ -63,144 +67,72 @@ class StudyViewModel(
 
     fun fetchCategories() {
         viewModelScope.launch {
-            categoryDataStatus = CategoryDataStatusUIState.Loading
-
             try {
-                val call = studyRepository.getCategories()
-                call.enqueue(object : Callback<GetAllCategoriesResponse> {
-                    override fun onResponse(
-                        call: Call<GetAllCategoriesResponse>,
-                        res: Response<GetAllCategoriesResponse>
-                    ) {
-                        if (res.isSuccessful) {
-                            categoryDataStatus = CategoryDataStatusUIState.Success(res.body()!!.categories)
-
-                            Log.d("get-todo-result", "GET TODO: ${res.body()}")
-
-                        } else {
-                            val errorMessage = Gson().fromJson(
-                                res.errorBody()!!.charStream(),
-                                ErrorModel::class.java
-                            )
-
-                            categoryDataStatus = CategoryDataStatusUIState.Failed(errorMessage.errors)
-                        }
-                    }
-
-                    override fun onFailure(call: Call<GetAllCategoriesResponse>, t: Throwable) {
-                        categoryDataStatus = CategoryDataStatusUIState.Failed(t.localizedMessage)
-                    }
-                })
-            } catch (error: IOException) {
-                categoryDataStatus = CategoryDataStatusUIState.Failed(error.localizedMessage)
+                val response = studyRepository.getCategories()
+                if (response.isSuccessful) {
+                    _categories.value =
+                        GetAllCategoriesResponse(response.body()?.data ?: emptyList())
+                    Log.d("StudyViewModel", "Fetched categories: ${_categories.value}")
+                } else {
+                    Log.e("StudyViewModel", "Error fetching categories: ${response.errorBody()}")
+                }
+            } catch (e: Exception) {
+                Log.e("StudyViewModel", "Exception fetching categories: ${e.message}")
             }
         }
     }
 
+
     fun fetchTopics(categoryId: Int) {
         viewModelScope.launch {
-            topicDataStatus = TopicDataStatusUIState.Loading
-
             try {
-                val call = studyRepository.getTopics(categoryId)
-                call.enqueue(object : Callback<GetAllTopicResponse> {
-                    override fun onResponse(
-                        call: Call<GetAllTopicResponse>,
-                        res: Response<GetAllTopicResponse>
-                    ) {
-                        if (res.isSuccessful) {
-                            topicDataStatus = TopicDataStatusUIState.Success(res.body()!!.topics)
+                val response = studyRepository.getTopics(categoryId)
+                Log.d("API Response", "Response Body: ${response.body()}")
 
-                            Log.d("get-todo-result", "GET TODO: ${res.body()}")
+                if (response.isSuccessful) {
+                    _topics.value = GetAllTopicResponse(
+                        response.body()?.data ?: emptyList()
+                    )
+                    Log.d("Category ID", "Fetching topics for categoryId: $categoryId")
 
-                        } else {
-                            val errorMessage = Gson().fromJson(
-                                res.errorBody()!!.charStream(),
-                                ErrorModel::class.java
-                            )
-
-                            topicDataStatus = TopicDataStatusUIState.Failed(errorMessage.errors)
-                        }
-                    }
-
-                    override fun onFailure(call: Call<GetAllTopicResponse>, t: Throwable) {
-                        topicDataStatus = TopicDataStatusUIState.Failed(t.localizedMessage)
-                    }
-                })
-            } catch (error: IOException) {
-                topicDataStatus = TopicDataStatusUIState.Failed(error.localizedMessage)
+                    Log.d("StudyViewModel", "Fetched categories: ${_topics.value}")
+                } else {
+                    Log.e("StudyViewModel", "Error fetching categories: ${response.errorBody()}")
+                }
+            } catch (e: Exception) {
+                Log.e("StudyViewModel", "Exception fetching categories: ${e.message}")
             }
         }
     }
 
     fun fetchVideos(topicId: Int) {
         viewModelScope.launch {
-            videosDataStatus = VideosDataStatusUIState.Loading
-
             try {
-                val call = studyRepository.getVideos(topicId)
-                call.enqueue(object : Callback<GetAllVideoResponse> {
-                    override fun onResponse(
-                        call: Call<GetAllVideoResponse>,
-                        res: Response<GetAllVideoResponse>
-                    ) {
-                        if (res.isSuccessful) {
-                            videosDataStatus = VideosDataStatusUIState.Success(res.body()!!.videos)
-
-                            Log.d("get-todo-result", "GET TODO: ${res.body()}")
-
-                        } else {
-                            val errorMessage = Gson().fromJson(
-                                res.errorBody()!!.charStream(),
-                                ErrorModel::class.java
-                            )
-
-                            videosDataStatus = VideosDataStatusUIState.Failed(errorMessage.errors)
-                        }
-                    }
-
-                    override fun onFailure(call: Call<GetAllVideoResponse>, t: Throwable) {
-                        videosDataStatus = VideosDataStatusUIState.Failed(t.localizedMessage)
-                    }
-                })
-            } catch (error: IOException) {
-                videosDataStatus = VideosDataStatusUIState.Failed(error.localizedMessage)
+                val response = studyRepository.getTopics(categoryId)
+                if (response.isSuccessful) {
+                    _topics.value = GetAllTopicResponse(response.body()?.data ?: emptyList())
+                    Log.d("StudyViewModel", "Fetched categories: ${_topics.value}")
+                } else {
+                    Log.e("StudyViewModel", "Error fetching categories: ${response.errorBody()}")
+                }
+            } catch (e: Exception) {
+                Log.e("StudyViewModel", "Exception fetching categories: ${e.message}")
             }
         }
     }
 
     fun getVideo(videoId: Int) {
         viewModelScope.launch {
-            videoDataStatus = StringDataStatusUIState.Loading
-
             try {
-                val call = studyRepository.getVideo(videoId)
-                call.enqueue(object : Callback<GetVideoResponse> {
-                    override fun onResponse(
-                        call: Call<GetVideoResponse>,
-                        res: Response<GetVideoResponse>
-                    ) {
-                        if (res.isSuccessful) {
-                            videoDataStatus = StringDataStatusUIState.Success(res.body()!!.video)
-
-                            Log.d("get-todo-result", "GET TODO: ${res.body()}")
-
-                        } else {
-                            val errorMessage = Gson().fromJson(
-                                res.errorBody()!!.charStream(),
-                                ErrorModel::class.java
-                            )
-
-                            videoDataStatus = StringDataStatusUIState.Failed(errorMessage.errors)
-                        }
-                    }
-
-                    override fun onFailure(call: Call<GetVideoResponse>, t: Throwable) {
-                        videoDataStatus = StringDataStatusUIState.Failed(t.localizedMessage)
-                    }
-                })
-            } catch (error: IOException) {
-                videosDataStatus = VideosDataStatusUIState.Failed(error.localizedMessage)
+                val response = studyRepository.getTopics(categoryId)
+                if (response.isSuccessful) {
+                    _topics.value = GetAllTopicResponse(response.body()?.data ?: emptyList())
+                    Log.d("StudyViewModel", "Fetched categories: ${_topics.value}")
+                } else {
+                    Log.e("StudyViewModel", "Error fetching categories: ${response.errorBody()}")
+                }
+            } catch (e: Exception) {
+                Log.e("StudyViewModel", "Exception fetching categories: ${e.message}")
             }
         }
     }
@@ -211,7 +143,7 @@ class StudyViewModel(
             initializer {
                 val application = (this[APPLICATION_KEY] as SilenceApplication)
                 val studyRepository = application.container.studyRepository
-                StudyViewModel( studyRepository)
+                StudyViewModel(studyRepository)
             }
         }
     }

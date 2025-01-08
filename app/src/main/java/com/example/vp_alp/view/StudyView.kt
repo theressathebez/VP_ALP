@@ -1,3 +1,4 @@
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,6 +28,7 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,22 +47,25 @@ import com.example.vp_alp.R
 import com.example.vp_alp.ui.theme.VP_ALPTheme
 import com.example.vp_alp.view.BottomNavigationBar
 import com.example.vp_alp.viewmodel.StudyViewModel
-import androidx.compose.runtime.LaunchedEffect
 
 
 //Study
 @Composable
 fun StudyScroll(
-    viewModel: StudyViewModel = viewModel(),
+    viewModel: StudyViewModel = viewModel(factory = StudyViewModel.Factory),
     navController: NavController,
-    ) {
-    val categories = viewModel.categories
-    val topics = viewModel.topics
+) {
+    val categories by viewModel.categories
+    val topics by viewModel.topics
 
-    var selectedCategoryId by remember { mutableStateOf<Int?>(null) }
+    var selectedCategoryId by remember { mutableStateOf(viewModel.categoryId) }
 
     LaunchedEffect(Unit) {
         viewModel.fetchCategories()
+        if (categories.data.isNotEmpty()) {
+            selectedCategoryId = categories.data.first().id
+            viewModel.fetchTopics(selectedCategoryId)
+        }
     }
 
     Column(
@@ -72,40 +77,39 @@ fun StudyScroll(
             modifier = Modifier
                 .weight(1f)
                 .background(Color.White)
-                .padding(horizontal = 4.dp, vertical = 16.dp)
+                .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
             item {
                 StudyView()
             }
 
             item {
-                LazyRow(
-                    modifier = Modifier
-                        .padding(vertical = 8.dp, horizontal = 16.dp)
-                ) {
-                    items(categories.value) { category ->
+                LazyRow(modifier = Modifier.padding(vertical = 16.dp)) {
+                    items(categories.data) { category ->
                         CatList(
                             categoryName = category.name,
                             isSelected = category.id == selectedCategoryId,
                             onClick = {
-                                // Set selected category and fetch topics
                                 selectedCategoryId = category.id
                                 viewModel.fetchTopics(category.id)
                             }
                         )
                     }
                 }
+
             }
 
-            selectedCategoryId?.let { categoryId ->
-                items(topics.value.filter { it.categoryId == categoryId }) { topic ->
-                    TopicList(
-                        topic_name = topic.topic_name,
-                        onClick = {
-                            navController.navigate("topicView/${topic.id}")
-                        }
-                    )
-                }
+            items(topics.data) { topic ->
+                Log.d("StudyScroll", "Topic: ${topic.topic_name}, ID: ${topic.id}")
+
+                TopicList(
+                    topic_name = topic.topic_name,
+                    onClick = {
+                        navController.navigate("topicView/${topic.id}")
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(14.dp))
             }
         }
 
@@ -158,7 +162,7 @@ fun TopicList(
             )
             .border(
                 border = BorderStroke(1.dp, Color(0xFFA35FED)),
-                shape = RoundedCornerShape(15.dp)
+                shape = RoundedCornerShape(18.dp)
             )
             .padding(16.dp)
             .fillMaxWidth()
@@ -194,7 +198,7 @@ fun StudyView() {
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(16.dp)
+            .padding(vertical = 16.dp)
     ) {
         Row(
             modifier = Modifier

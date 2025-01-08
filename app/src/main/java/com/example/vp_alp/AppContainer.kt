@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import androidx.datastore.preferences.core.Preferences
 
+//buat jembatan nya antara backend sama frontend, biar bisa diakses
 interface AppContainer {
     val studyRepository: StudyRepository
 }

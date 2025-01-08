@@ -11,15 +11,17 @@ import com.example.vp_alp.model.GetVideoResponse
 import com.example.vp_alp.model.Topic
 import com.example.vp_alp.model.Video
 import retrofit2.Call
+import retrofit2.Response
 
+//mengolah data dari backend spy bisa dipake di frontend
 interface StudyRepository {
-    fun getCategories(): Call<GetAllCategoriesResponse>
+    suspend fun getCategories(): Response<GetAllCategoriesResponse>
 
-    fun getTopics(categoryId: Int): Call<GetAllTopicResponse>
+    suspend fun getTopics(categoryId: Int): Response<GetAllTopicResponse>
 
-    fun getVideos(topicId: Int): Call<GetAllVideoResponse>
+    suspend fun getVideos(topicId: Int): Response<GetAllVideoResponse>
 
-    fun getVideo(videoId: Int): Call<GetVideoResponse>
+    suspend fun getVideo(videoId: Int): Response<GetVideoResponse>
 
 //    fun saveFlashcard(
 //        token: String,
@@ -32,23 +34,24 @@ interface StudyRepository {
 //    fun deleteFlashcard(token: String, userId: Int): Call<GeneralResponseModel>
 }
 
+
 class NetworkStudyRepository(
     private val studyService: StudyService
 ) : StudyRepository {
 
-    override fun getCategories(): Call<GetAllCategoriesResponse> {
+    override suspend fun getCategories(): Response<GetAllCategoriesResponse> {
         return studyService.getCategories()
     }
 
-    override fun getTopics(categoryId: Int): Call<GetAllTopicResponse> {
+    override suspend fun getTopics(categoryId: Int): Response<GetAllTopicResponse> {
         return studyService.getTopics(categoryId)
     }
 
-    override fun getVideos(topicId: Int): Call<GetAllVideoResponse> {
+    override suspend fun getVideos(topicId: Int): Response<GetAllVideoResponse> {
         return studyService.getVideos(topicId)
     }
 
-    override fun getVideo(videoId: Int): Call<GetVideoResponse> {
+    override suspend fun getVideo(videoId: Int): Response<GetVideoResponse> {
         return studyService.getVideo(videoId)
     }
 

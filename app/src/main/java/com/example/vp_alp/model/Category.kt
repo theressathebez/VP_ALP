@@ -1,7 +1,7 @@
 package com.example.vp_alp.model
 
 data class GetAllCategoriesResponse(
-    val categories: List<Category>
+    val data: List<Category>
 )
 
 data class Category(

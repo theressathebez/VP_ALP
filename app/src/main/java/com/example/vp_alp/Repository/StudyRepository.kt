@@ -13,7 +13,7 @@ import com.example.vp_alp.model.Video
 import retrofit2.Call
 import retrofit2.Response
 
-//mengolah data dari backend spy bisa dipake di frontend
+//mengolah data dari backend spy bisa dimengerti di frontend
 interface StudyRepository {
     suspend fun getCategories(): Response<GetAllCategoriesResponse>
 

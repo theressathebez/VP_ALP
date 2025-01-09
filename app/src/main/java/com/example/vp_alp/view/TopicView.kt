@@ -43,12 +43,12 @@ import com.example.vp_alp.viewmodel.StudyViewModel
 fun TopicScroll(
     topicId: Int,
     navController: NavController,
-    viewModel: StudyViewModel = viewModel(),
+    viewModel: StudyViewModel = viewModel(factory = StudyViewModel.Factory),
     onClick: () -> Unit
 ) {
-    val videos by viewModel.videos.collectAsState()
+    val videos by viewModel.videos
 
-    LaunchedEffect(topicId) {
+    LaunchedEffect(Unit) {
         viewModel.fetchVideos(topicId)
     }
 
@@ -86,7 +86,7 @@ fun TopicScroll(
             modifier = Modifier.padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(videos) { video ->
+            items(videos.data) { video ->
                 TopicView(
                     title = video.title,
                     onClick = {

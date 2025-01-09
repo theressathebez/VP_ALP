@@ -1,7 +1,7 @@
 package com.example.vp_alp.model
 
 data class GetAllVideoResponse(
-    val videos: List<Video>
+    val data: List<Video>
 )
 
 data class GetVideoResponse(

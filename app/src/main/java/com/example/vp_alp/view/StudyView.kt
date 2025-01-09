@@ -62,10 +62,6 @@ fun StudyScroll(
 
     LaunchedEffect(Unit) {
         viewModel.fetchCategories()
-        if (categories.data.isNotEmpty()) {
-            selectedCategoryId = categories.data.first().id
-            viewModel.fetchTopics(selectedCategoryId)
-        }
     }
 
     Column(
@@ -94,6 +90,8 @@ fun StudyScroll(
                                 viewModel.fetchTopics(category.id)
                             }
                         )
+
+                        Spacer(modifier = Modifier.width(5.dp))
                     }
                 }
 

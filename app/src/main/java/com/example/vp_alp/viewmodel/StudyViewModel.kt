@@ -13,42 +13,16 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.vp_alp.Repository.StudyRepository
 import com.example.vp_alp.SilenceApplication
-import com.example.vp_alp.model.Category
-import com.example.vp_alp.model.ErrorModel
 import com.example.vp_alp.model.GetAllCategoriesResponse
 import com.example.vp_alp.model.GetAllTopicResponse
 import com.example.vp_alp.model.GetAllVideoResponse
 import com.example.vp_alp.model.GetVideoResponse
-import com.example.vp_alp.model.Topic
-import com.example.vp_alp.model.Video
-import com.example.vp_alp.uiState.CategoryDataStatusUIState
-import com.example.vp_alp.uiState.StringDataStatusUIState
-import com.example.vp_alp.uiState.TopicDataStatusUIState
-import com.example.vp_alp.uiState.VideosDataStatusUIState
-import com.google.gson.Gson
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.IOException
 
 
 class StudyViewModel(
     private val studyRepository: StudyRepository
 ) : ViewModel() {
-    var categoryDataStatus: CategoryDataStatusUIState by mutableStateOf(CategoryDataStatusUIState.Start)
-        private set
-
-    var topicDataStatus: TopicDataStatusUIState by mutableStateOf(TopicDataStatusUIState.Start)
-        private set
-
-    var videosDataStatus: VideosDataStatusUIState by mutableStateOf(VideosDataStatusUIState.Start)
-        private set
-
-    var videoDataStatus: StringDataStatusUIState by mutableStateOf(StringDataStatusUIState.Start)
-        private set
 
     var categoryId by mutableStateOf(0)
         private set
@@ -59,11 +33,11 @@ class StudyViewModel(
     private val _topics = mutableStateOf(GetAllTopicResponse(emptyList()))
     val topics: State<GetAllTopicResponse> = _topics
 
-    private val _videos = MutableStateFlow<List<Video>>(emptyList())
-    val videos: StateFlow<List<Video>> get() = _videos
+    private val _videos = mutableStateOf(GetAllVideoResponse(emptyList()))
+    val videos: State<GetAllVideoResponse> = _videos
 
-    private val _video = MutableStateFlow<Video?>(null)
-    val video: StateFlow<Video?> get() = _video
+    private val _video = mutableStateOf(GetVideoResponse(null.toString()))
+    val video: State<GetVideoResponse> = _video
 
     fun fetchCategories() {
         viewModelScope.launch {
@@ -95,12 +69,12 @@ class StudyViewModel(
                     )
                     Log.d("Category ID", "Fetching topics for categoryId: $categoryId")
 
-                    Log.d("StudyViewModel", "Fetched categories: ${_topics.value}")
+                    Log.d("StudyViewModel", "Fetched topics: ${_topics.value}")
                 } else {
-                    Log.e("StudyViewModel", "Error fetching categories: ${response.errorBody()}")
+                    Log.e("StudyViewModel", "Error fetching topics: ${response.errorBody()}")
                 }
             } catch (e: Exception) {
-                Log.e("StudyViewModel", "Exception fetching categories: ${e.message}")
+                Log.e("StudyViewModel", "Exception fetching topics: ${e.message}")
             }
         }
     }
@@ -108,15 +82,15 @@ class StudyViewModel(
     fun fetchVideos(topicId: Int) {
         viewModelScope.launch {
             try {
-                val response = studyRepository.getTopics(categoryId)
+                val response = studyRepository.getVideos(topicId)
                 if (response.isSuccessful) {
-                    _topics.value = GetAllTopicResponse(response.body()?.data ?: emptyList())
-                    Log.d("StudyViewModel", "Fetched categories: ${_topics.value}")
+                    _videos.value = GetAllVideoResponse(response.body()?.data ?: emptyList())
+                    Log.d("StudyViewModel", "Fetched videos: ${_videos.value}")
                 } else {
-                    Log.e("StudyViewModel", "Error fetching categories: ${response.errorBody()}")
+                    Log.e("StudyViewModel", "Error fetching videos: ${response.errorBody()}")
                 }
             } catch (e: Exception) {
-                Log.e("StudyViewModel", "Exception fetching categories: ${e.message}")
+                Log.e("StudyViewModel", "Exception fetching videos: ${e.message}")
             }
         }
     }

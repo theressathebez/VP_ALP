@@ -14,6 +14,7 @@ import com.example.vp_alp.view.TopicScroll
 import com.example.vp_alp.view.VideoView
 import com.example.vp_alp.viewmodel.StudyViewModel
 
+
 enum class listScreen {
     Study,
     Topic,
@@ -27,6 +28,7 @@ fun AppRouting(
     studyViewModel: StudyViewModel = viewModel(factory = StudyViewModel.Factory)
 ) {
     val localContext = LocalContext.current
+
 
     NavHost(
         navController = navController,
@@ -69,3 +71,5 @@ fun AppRouting(
         }
     }
 }
+
+

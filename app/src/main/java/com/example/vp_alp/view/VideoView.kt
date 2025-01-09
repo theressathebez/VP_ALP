@@ -46,7 +46,7 @@ fun VideoView(
     viewModel: StudyViewModel = viewModel(),
     onClick: () -> Unit
 ) {
-    val video by viewModel.video.collectAsState()
+    val video by viewModel.video
 
     LaunchedEffect(videoId) {
         viewModel.getVideo(videoId)

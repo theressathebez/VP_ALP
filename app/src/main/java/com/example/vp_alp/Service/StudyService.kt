@@ -11,7 +11,7 @@ import retrofit2.http.Header
 import retrofit2.http.Path
 
 //akses API lgsg dari backend
-//
+
 interface StudyService {
     //ambil kategori
     @GET("api/categories")

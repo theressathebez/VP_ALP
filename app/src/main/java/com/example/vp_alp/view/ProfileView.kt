@@ -1,7 +1,10 @@
 package com.example.vp_alp.view
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,31 +22,65 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.vp_alp.R
+import com.example.vp_alp.enums.listScreen
+import com.example.vp_alp.uiStates.UserDataStatusUIState
+import com.example.vp_alp.viewmodel.AuthenticationViewModel
+import com.example.vp_alp.viewmodel.UserViewModel
 
 
 @Composable
-fun ProfileView() {
-    Column {
+fun ProfileView(
+    userViewModel: UserViewModel,
+    token : String,
+    navController: NavHostController,
+    context: Context
+) {
+    val username = userViewModel.username.collectAsState()
+    val logoutStatus = userViewModel.logoutStatus
+
+//    LaunchedEffect (token) {
+//        if (token != "Unknown") {
+//
+//        }
+//    }
+
+    LaunchedEffect(logoutStatus) {
+        if (logoutStatus is UserDataStatusUIState.Failed) {
+            Toast.makeText(context, "LOGOUT ERROR: ${logoutStatus.errorMessage}", Toast.LENGTH_SHORT).show()
+            userViewModel.clearLogoutErrorMessage()
+        }
+    }
+
+    Column (
+        modifier = Modifier
+    ) {
         Box {
             Image(
                 painter = painterResource(id = R.drawable.background5),
                 contentDescription = "background5",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(745.dp)
-                    .offset(y = (-2).dp)
+                    .height(800.dp)
+                    .offset(y = (-5).dp),
+                contentScale = ContentScale.Crop
             )
                 Row (
                     modifier = Modifier
@@ -56,7 +93,7 @@ fun ProfileView() {
                         contentDescription = "group_410",
                         modifier = Modifier
                             .size(105.dp)
-                            .offset(y = (107.dp))
+                            .offset(y = (107.dp), x = 2.dp)
                     )
                 }
                 Surface (
@@ -69,8 +106,8 @@ fun ProfileView() {
                         modifier = Modifier
                             .clip(RoundedCornerShape(25.dp))
                             .background(Color(0xFFF4F4F4))
-                            .width(355.dp)
-                            .height(550.dp)
+                            .width(376.dp)
+                            .height(610.dp)
                     ) {
                         Box (
                             modifier = Modifier
@@ -83,7 +120,8 @@ fun ProfileView() {
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
-                                    "Leon Smith",
+//                                    "",
+                                    text = username.value,
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight.SemiBold,
                                 )
@@ -97,14 +135,14 @@ fun ProfileView() {
                                         contentDescription = "frame_370",
                                         modifier = Modifier
                                             .size(65.dp)
-                                            .offset(y = (-20.dp))
+                                            .offset(y = (-20.dp), x = 2.dp)
                                     )
                                     Text(
                                         "Beginner",
                                         fontSize = 8.sp,
                                         color = Color.White,
                                         modifier = Modifier
-                                            .padding(top = 8.dp)
+                                            .padding(top = 1.dp)
                                             .offset(x = (-48.dp))
                                     )
                                 }
@@ -114,6 +152,7 @@ fun ProfileView() {
                                     modifier = Modifier
                                         .size(355.dp)
                                         .offset(y = (-215.dp))
+                                        .clickable { }
                                 )
                                 Column (
                                     modifier = Modifier
@@ -150,6 +189,9 @@ fun ProfileView() {
                                             modifier = Modifier
                                                 .size(25.dp)
                                                 .offset(y = (-380.dp))
+                                                .clickable {
+                                                    navController.navigate(listScreen.Account.name)
+                                                }
                                         )
                                     }
                                     Row (
@@ -182,6 +224,9 @@ fun ProfileView() {
                                             modifier = Modifier
                                                 .size(25.dp)
                                                 .offset(y = (-370.dp))
+                                                .clickable {
+                                                    navController.navigate(listScreen.UserFlashcard.name)
+                                                }
                                         )
                                     }
                                     Row (
@@ -213,6 +258,9 @@ fun ProfileView() {
                                             modifier = Modifier
                                                 .size(25.dp)
                                                 .offset(y = (-360.dp))
+                                                .clickable {
+                                                    userViewModel.logoutUser(token, navController)
+                                                }
                                         )
                                     }
 
@@ -230,5 +278,10 @@ fun ProfileView() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ProfilePreview() {
-    ProfileView()
+    ProfileView(
+        userViewModel = viewModel(factory = UserViewModel.Factory),
+        navController = rememberNavController(),
+        token = "",
+        context = LocalContext.current
+    )
 }

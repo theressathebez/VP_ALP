@@ -16,6 +16,7 @@ import com.example.vp_alp.SilenceApplication
 import com.example.vp_alp.enums.listScreen
 import com.example.vp_alp.model.Error
 import com.example.vp_alp.model.GeneralResponseModel
+import com.example.vp_alp.uiStates.ProfileDataStatusUIState
 import com.example.vp_alp.uiStates.UserDataStatusUIState
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.SharingStarted
@@ -30,7 +31,11 @@ import java.io.IOException
 class UserViewModel (
     private val userRepository: UserRepository
 ): ViewModel() {
+//    var dataStatus: ProfileDataStatusUIState by mutableStateOf(ProfileDataStatusUIState.Start)
+//        private set
     var logoutStatus: UserDataStatusUIState by mutableStateOf(UserDataStatusUIState.Start)
+        private set
+    var deleteStatus: UserDataStatusUIState by mutableStateOf(UserDataStatusUIState.Start)
         private set
 
 //    var dataStatus: TodoDataStatusUIState by mutableStateOf(TodoDataStatusUIState.Start)
@@ -98,6 +103,45 @@ class UserViewModel (
         }
     }
 
+    fun deleteUser(token: String, userId: Int, navController: NavHostController) {
+        viewModelScope.launch {
+            deleteStatus = UserDataStatusUIState.Loading
+
+            try {
+                val call = userRepository.deleteUser(token, userId)
+
+                call.enqueue(object: Callback<GeneralResponseModel> {
+                    override fun onResponse(
+                        call: Call<GeneralResponseModel>,
+                        res: Response<GeneralResponseModel>
+                    ) {
+                        if (res.isSuccessful) {
+                            deleteStatus = UserDataStatusUIState.Success(res.body()!!.data)
+
+                            Log.d("delete-status", "Delete status: ${res.body()!!.data}")
+
+                            navController.popBackStack()
+                        } else {
+                            val errorMessage = Gson().fromJson(
+                                res.errorBody()!!.charStream(),
+                                Error::class.java
+                            )
+
+                            deleteStatus = UserDataStatusUIState.Failed(errorMessage.errors)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<GeneralResponseModel>, t: Throwable) {
+                        deleteStatus = UserDataStatusUIState.Failed(t.localizedMessage)
+                    }
+
+                })
+            } catch (error: IOException) {
+                deleteStatus = UserDataStatusUIState.Failed(error.localizedMessage)
+            }
+        }
+    }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
@@ -120,11 +164,7 @@ class UserViewModel (
         logoutStatus = UserDataStatusUIState.Start
     }
 
-    fun delAccount(token: String, navController: NavHostController) {
-
+    fun clearErrorMessage() {
+        deleteStatus = UserDataStatusUIState.Start
     }
-
-//    fun clearDataErrorMessage() {
-//        dataStatus = TodoDataStatusUIState.Start
-//    }
 }

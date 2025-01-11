@@ -1,5 +1,7 @@
 package com.example.vp_alp.view
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,11 +21,13 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +39,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.vp_alp.R
 import com.example.vp_alp.enums.listScreen
+import com.example.vp_alp.uiStates.UserDataStatusUIState
 import com.example.vp_alp.viewmodel.UserViewModel
 
 
@@ -42,8 +47,19 @@ import com.example.vp_alp.viewmodel.UserViewModel
 fun DelAccountView(
     userViewModel: UserViewModel,
     navController: NavHostController,
-    token: String
+    token: String,
+    context: Context
 ) {
+    val dataStatus = userViewModel.dataStatus
+    val deleteStatus = userViewModel.deleteStatus
+
+    LaunchedEffect(deleteStatus) {
+        if (deleteStatus is UserDataStatusUIState.Failed) {
+            Toast.makeText(context, deleteStatus.errorMessage, Toast.LENGTH_SHORT).show()
+            userViewModel.clearErrorMessage()
+        }
+    }
+
     Column {
         Box {
             Image(
@@ -132,7 +148,7 @@ fun DelAccountView(
                     }
                     Button (
                         onClick = {
-                            userViewModel.delAccount(token, navController)
+                            userViewModel.deleteUser(token, dataStatus.data.id, navController)
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFF5C469C)
@@ -159,6 +175,7 @@ fun DelAccountPreview() {
     DelAccountView(
         userViewModel = viewModel(factory = UserViewModel.Factory),
         navController = rememberNavController(),
-        token = ""
+        token = "",
+        context = LocalContext.current
     )
 }

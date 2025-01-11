@@ -17,6 +17,7 @@ interface UserRepository {
     val currentEmail: Flow<String>
 
     fun logout(token: String): Call<GeneralResponseModel>
+    fun deleteUser(token: String, userId: Int): Call<GeneralResponseModel>
 
     suspend fun saveUserToken(token: String)
     suspend fun saveUsername(username: String)
@@ -65,6 +66,10 @@ class NetworkUserRepository(
 
     override fun logout(token: String): Call<GeneralResponseModel> {
         return userAPIService.logout(token)
+    }
+
+    override fun deleteUser(token: String, userId: Int): Call<GeneralResponseModel> {
+        return userAPIService.deleteUser(token)
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.vp_alp.route
 
 import StudyScroll
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -15,8 +16,15 @@ import com.example.vp_alp.view.TopicScroll
 import com.example.vp_alp.view.VideoView
 import com.example.vp_alp.viewmodel.StudyViewModel
 
+import com.example.vp_alp.view.STTSavedView
+import com.example.vp_alp.view.STTView
+import com.example.vp_alp.view.TopicScroll
+import com.example.vp_alp.view.VideoView
+import com.example.vp_alp.viewmodel.STTViewModel
 
 enum class listScreen {
+    STT,
+    SavedTexts,
     Study,
     Topic,
     Video,
@@ -26,18 +34,28 @@ enum class listScreen {
 @Composable
 fun AppRouting(
     navController: NavHostController = rememberNavController(),
-    studyViewModel: StudyViewModel = viewModel(factory = StudyViewModel.Factory)
+    studyViewModel: StudyViewModel = viewModel(factory = StudyViewModel.Factory),
+    activity: Activity, viewModel: STTViewModel
 ) {
+
     NavHost(
         navController = navController,
-        //layar pertama yg dimunculkan
-        startDestination = listScreen.Study.name
+        startDestination = listScreen.STT.name
     ) {
         composable(route = listScreen.Study.name) {
             StudyScroll(
                 navController = navController,
                 viewModel = studyViewModel
+        
+
+        
             )
+        }
+
+        composable(
+            route = listScreen.STT.name
+        ) {
+            STTView(navController = navController, activity = activity, viewModel = viewModel)
         }
 
         // Topic screen
@@ -79,6 +97,12 @@ fun AppRouting(
                 viewModel = studyViewModel,
                 onClick = { navController.popBackStack() }
             )
+        }
+
+        composable(
+            route = listScreen.SavedTexts.name
+        ) {
+            STTSavedView(navController = navController)
         }
     }
 }

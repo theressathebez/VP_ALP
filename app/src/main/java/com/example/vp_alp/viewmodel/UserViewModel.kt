@@ -19,6 +19,7 @@ import com.example.vp_alp.model.GeneralResponseModel
 import com.example.vp_alp.uiStates.ProfileDataStatusUIState
 import com.example.vp_alp.uiStates.UserDataStatusUIState
 import com.google.gson.Gson
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -37,8 +38,18 @@ class UserViewModel (
         private set
     var deleteStatus: UserDataStatusUIState by mutableStateOf(UserDataStatusUIState.Start)
         private set
+    var updateStatus: UserDataStatusUIState by mutableStateOf(UserDataStatusUIState.Start)
+        private set
+    var passwordInput by mutableStateOf("")
+        private set
 
 
+//    private val _userDataStatusUIState = MutableStateFlow(UserDataStatusUIState())
+//
+//    val userDataStatusUIState: StateFlow<UserDataStatusUIState>
+//        get() {
+//            return _userDataStatusUIState.asStateFlow()
+//        }
 
     val username: StateFlow<String> = userRepository.currentUsername.stateIn(
         scope = viewModelScope,
@@ -147,6 +158,52 @@ class UserViewModel (
         }
     }
 
+    fun changePasswordInput(password: String) {
+        passwordInput = password
+    }
+
+    fun updateUser(token: String, navController: NavHostController) {
+        viewModelScope.launch {
+            updateStatus = UserDataStatusUIState.Loading
+
+            try {
+                val call = userRepository.updateUser(token, passwordInput)
+
+                call.enqueue(object: Callback<GeneralResponseModel> {
+                    override fun onResponse(
+                        call: Call<GeneralResponseModel>,
+                        res: Response<GeneralResponseModel>
+                    ) {
+                        if (res.isSuccessful) {
+                            updateStatus = UserDataStatusUIState.Success(res.body()!!.data)
+
+                            navController.navigate(listScreen.Profile.name) {
+                                popUpTo(listScreen.Profile.name) {
+                                    inclusive = false
+                                }
+                            }
+
+                        } else {
+                            val errorMessage = Gson().fromJson(
+                                res.errorBody()!!.charStream(),
+                                Error::class.java
+                            )
+
+                            updateStatus = UserDataStatusUIState.Failed(errorMessage.errors)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<GeneralResponseModel>, t: Throwable) {
+                        updateStatus = UserDataStatusUIState.Failed(t.localizedMessage)
+                    }
+
+                })
+            } catch (error: IOException) {
+                updateStatus = UserDataStatusUIState.Failed(error.localizedMessage)
+            }
+        }
+    }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
@@ -171,5 +228,9 @@ class UserViewModel (
 
     fun clearErrorMessage() {
         deleteStatus = UserDataStatusUIState.Start
+    }
+
+    fun clearErrorMessage1() {
+        updateStatus = UserDataStatusUIState.Start
     }
 }

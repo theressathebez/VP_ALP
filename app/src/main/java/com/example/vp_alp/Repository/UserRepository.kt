@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.vp_alp.Service.UserAPIService
 import com.example.vp_alp.model.GeneralResponseModel
+import com.example.vp_alp.model.UserModel
 import com.example.vp_alp.model.UserRequest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -68,7 +69,7 @@ class NetworkUserRepository(
     }
 
     override fun updateUser(token: String, password: String): Call<GeneralResponseModel> {
-        return userAPIService.updateUser(token, UserRequest(password))
+        return userAPIService.updateUser(token, UserModel(password))
     }
 
     override fun logout(token: String): Call<GeneralResponseModel> {

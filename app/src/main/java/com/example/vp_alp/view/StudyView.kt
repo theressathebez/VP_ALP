@@ -1,10 +1,26 @@
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -12,6 +28,11 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,61 +41,101 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.vp_alp.R
+import com.example.vp_alp.route.listScreen
 import com.example.vp_alp.ui.theme.VP_ALPTheme
+import com.example.vp_alp.view.BottomNavigationBar
+import com.example.vp_alp.viewmodel.StudyViewModel
 
 @Composable
-fun StudyScroll() {
-    LazyColumn(
+fun StudyScroll(
+    viewModel: StudyViewModel = viewModel(factory = StudyViewModel.Factory),
+    navController: NavController,
+) {
+    val categories by viewModel.categories
+    val topics by viewModel.topics
+
+    var selectedCategoryId by remember { mutableStateOf(viewModel.categoryId) }
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchCategories()
+    }
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
-        item {
-            StudyView()
-        }
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .background(Color.White)
+                .padding(horizontal = 16.dp, vertical = 16.dp)
+        ) {
+            item {
+                StudyView()
+            }
 
-        item {
-            LazyRow(
-                modifier = Modifier
-                    .padding(vertical = 8.dp, horizontal = 16.dp)
-            ) {
-                val categories = listOf("Perkenalan", "Keluarga", "Sekolah", "Pekerjaan", "Perasaan")
-                items(categories.size) { index ->
-                    CatView(categoryName = categories[index])
-                    Spacer(modifier = Modifier.width(8.dp))
+            item {
+                LazyRow(modifier = Modifier.padding(vertical = 16.dp)) {
+                    items(categories.data) { category ->
+                        CatList(
+                            categoryName = category.name,
+                            isSelected = category.id == selectedCategoryId,
+                            onClick = {
+                                selectedCategoryId = category.id
+                                viewModel.fetchTopics(category.id)
+                            }
+                        )
+
+                        Spacer(modifier = Modifier.width(5.dp))
+                    }
                 }
+
+            }
+
+            items(topics.data) { topic ->
+                Log.d("StudyScroll", "Topic: ${topic.topic_name}, ID: ${topic.id}")
+
+                TopicList(
+                    topic_name = topic.topic_name,
+                    onClick = {
+                        navController.navigate("${listScreen.Topic.name}/${topic.id}")
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(14.dp))
             }
         }
 
-        items(10) { index ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 8.dp), // Tambahkan padding horizontal
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                // Kotak pertama
-                TopicView(title = "Topic ${(index * 2) + 1}", duration = "10 mins")
-                Spacer(modifier = Modifier.width(8.dp))
-                // Kotak kedua
-                TopicView(title = "Topic ${(index * 2) + 2}", duration = "15 mins")
-            }
-        }
+        BottomNavigationBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(bottom = 16.dp)
+                .navigationBarsPadding(),
+            currentScreen = "study"
+        )
     }
 }
 
 @Composable
-fun CatView(categoryName: String) {
+fun CatList(
+    categoryName: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
     Box(
         modifier = Modifier
             .size(width = 100.dp, height = 40.dp)
             .background(
-                color = Color(0xFFFFA726),
+                color = if (isSelected) Color(0xFFFFA726) else Color.LightGray,
                 shape = RoundedCornerShape(30.dp)
-            ), contentAlignment = Alignment.Center
+            )
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
     ) {
         Text(
             text = categoryName,
@@ -86,9 +147,9 @@ fun CatView(categoryName: String) {
 }
 
 @Composable
-fun TopicView(
-    title: String,
-    duration: String
+fun TopicList(
+    topic_name: String,
+    onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -98,44 +159,43 @@ fun TopicView(
             )
             .border(
                 border = BorderStroke(1.dp, Color(0xFFA35FED)),
-                shape = RoundedCornerShape(15.dp)
+                shape = RoundedCornerShape(18.dp)
             )
             .padding(16.dp)
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
     ) {
-        Column {
-            Text(
-                text = title,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold
-            )
-            Text(
-                text = duration,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Normal,
-                color = Color.Gray
-            )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = topic_name,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
 
             Image(
-                painter = painterResource(id = R.drawable.frame),
+                painter = painterResource(id = R.drawable.image_removebg_preview__1_),
                 contentDescription = "Lesson Image",
                 modifier = Modifier
                     .size(120.dp)
-                    .offset(y = 18.dp)
             )
-
         }
     }
 }
 
 @Composable
-fun StudyView(
-
-) {
+fun StudyView() {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(16.dp)
+            .padding(vertical = 16.dp)
     ) {
         Row(
             modifier = Modifier
@@ -343,8 +403,10 @@ fun StudyView(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun MovieCardPreview() {
+fun StudyViewPreview() {
     VP_ALPTheme {
-        StudyScroll()
+        VP_ALPTheme {
+
+        }
     }
 }

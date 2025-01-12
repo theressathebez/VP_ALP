@@ -31,13 +31,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.vp_alp.R
+import com.example.vp_alp.route.listScreen
+
 import com.example.vp_alp.viewmodel.STTViewModel
 
 @Composable
 fun STTView(
-    viewModel: STTViewModel = viewModel(),
-    activity: Activity
+    viewModel: STTViewModel
+    = viewModel(),
+    activity: Activity,
+    navController: NavController
 ) {
     val text by viewModel.text.collectAsState()
     val context = LocalContext.current
@@ -78,7 +84,10 @@ fun STTView(
                         .width(80.dp)
                         .height(24.dp)
                         .clip(RoundedCornerShape(15.dp))
-                        .background(color = Color(0xFF5C469C)),
+                        .background(color = Color(0xFF5C469C))
+                        .clickable {
+                            navController.navigate(listScreen.SavedTexts.name)
+                        },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -88,6 +97,7 @@ fun STTView(
                         fontSize = 12.sp,
                     )
                 }
+
             }
         }
         Column(
@@ -140,7 +150,7 @@ fun STTView(
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.baseline_delete_outline_24),
-                    contentDescription = "delete",
+                    contentDescription = "back",
                     modifier = Modifier
                         .padding(16.dp)
                         .width(30.dp)
@@ -168,12 +178,5 @@ fun STTView(
                 modifier = Modifier.size(50.dp)
             )
         }
-    }
-}
-@Preview(showBackground = true)
-@Composable
-fun STTViewPreview() {
-    VP_ALPTheme {
-        STTView(activity = Activity())
     }
 }

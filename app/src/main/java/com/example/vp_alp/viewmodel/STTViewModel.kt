@@ -28,10 +28,7 @@ class STTViewModel : ViewModel() {
             Toast.makeText(context, "Speech not Available", Toast.LENGTH_SHORT).show()
         } else {
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-            intent.putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH
-            )
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH)
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.US)
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Talk Something")
 

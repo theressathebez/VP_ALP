@@ -31,13 +31,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.vp_alp.ui.theme.VP_ALPTheme
-import com.example.vp_alp.viewModel.STTViewModel
+import com.example.vp_alp.viewmodel.STTViewModel
+//import com.example.vp_alp.route.listScreen
 
 @Composable
 fun STTSavedView(
     viewModel: STTViewModel = viewModel(),
-    onBack: () -> Unit
+    navController: NavController
 ) {
     // Collect the saved texts state
     val savedTexts by viewModel.text.collectAsState()
@@ -55,7 +57,7 @@ fun STTSavedView(
                 .padding(bottom = 24.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = onBack) {
+            IconButton(onClick = { navController.popBackStack() }) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Back"
@@ -128,10 +130,3 @@ fun STTSavedView(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun STTSavedViewPreview() {
-    VP_ALPTheme {
-        STTSavedView(onBack = {})
-    }
-}

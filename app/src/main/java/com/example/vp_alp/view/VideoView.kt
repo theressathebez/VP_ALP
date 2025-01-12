@@ -70,14 +70,14 @@ fun VideoView(
         )
 
         selectedVideo?.let { video ->
-            Image(
-                painter = painterResource(id = R.drawable.group_369),
-                contentDescription = "Profile Picture",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 14.dp)
-                    .height(300.dp)
-            )
+//            Image(
+//                painter = painterResource(id = R.drawable.group_369),
+//                contentDescription = "Profile Picture",
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(vertical = 14.dp)
+//                    .height(300.dp)
+//            )
 
             Box(
                 modifier = Modifier

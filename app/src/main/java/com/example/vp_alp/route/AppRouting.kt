@@ -1,17 +1,22 @@
 package com.example.vp_alp.route
 
 import StudyScroll
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.vp_alp.view.STTSavedView
+import com.example.vp_alp.view.STTView
 import com.example.vp_alp.view.TopicScroll
 import com.example.vp_alp.view.VideoView
+import com.example.vp_alp.viewmodel.STTViewModel
 
-//
 enum class listScreen {
+    STT,
+    SavedTexts,
     Study,
     Topic,
     Video,
@@ -19,14 +24,19 @@ enum class listScreen {
 }
 
 @Composable
-fun AppRouting() {
+fun AppRouting(activity: Activity, viewModel: STTViewModel) {
     val navController = rememberNavController()
 
     NavHost(
         navController = navController,
-        //layar pertama yg dimunculkan
-        startDestination = listScreen.Study.name
+        startDestination = listScreen.STT.name
     ) {
+        composable(
+            route = listScreen.STT.name
+        ) {
+            STTView(navController = navController, activity = activity, viewModel = viewModel)
+        }
+
         composable(
             route = listScreen.Study.name
         ) {
@@ -57,6 +67,12 @@ fun AppRouting() {
                     navController.popBackStack()
                 }
             )
+        }
+
+        composable(
+            route = listScreen.SavedTexts.name
+        ) {
+            STTSavedView(navController = navController)
         }
     }
 }

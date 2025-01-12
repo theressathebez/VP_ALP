@@ -81,4 +81,13 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0") //untuk logging
     // add DataStore preferences
     implementation("androidx.datastore:datastore-preferences:1.0.0") //untuk persist data
+
+    //exo player
+//    implementation("androidx.media3:media3-exoplayer:1.5.1")
+//    implementation("androidx.media3:media3-ui:1.5.1")
+//    implementation("androidx.media3:media3-common:1.5.1")
+
+    //coil: thumbnail
+    implementation("io.coil-kt:coil-compose:2.2.2")
+
 }

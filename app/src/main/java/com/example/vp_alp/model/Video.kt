@@ -1,19 +1,29 @@
 package com.example.vp_alp.model
 
+import com.google.gson.annotations.SerializedName
+
 data class GetAllVideoResponse(
     val data: List<Video>
 )
 
 data class GetVideoResponse(
-    val video: String
+    val data: Video
 )
 
+//data class videoOnly(
+//    val videoUrl: String = "",
+//    val thumbnail: String = ""
+//)
+
 data class Video(
-    val id: Int,
-    val topicId: Int,
-    val title: String,
-    val flashcard: String,
-    val videoUrl: String
+    val id: Int = 0,
+    val topicId: Int = 0,
+
+    @SerializedName("videoName")
+    val video_name: String = "",
+
+    val flashcard: String = "",
+    val video_url: String = ""
 )
 
 data class FlashcardRequest(

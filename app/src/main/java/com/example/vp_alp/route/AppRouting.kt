@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.vp_alp.view.FlashcardView
 import com.example.vp_alp.view.TopicScroll
 import com.example.vp_alp.view.VideoView
 import com.example.vp_alp.viewmodel.StudyViewModel
@@ -27,9 +28,6 @@ fun AppRouting(
     navController: NavHostController = rememberNavController(),
     studyViewModel: StudyViewModel = viewModel(factory = StudyViewModel.Factory)
 ) {
-    val localContext = LocalContext.current
-
-
     NavHost(
         navController = navController,
         //layar pertama yg dimunculkan
@@ -44,10 +42,10 @@ fun AppRouting(
 
         // Topic screen
         composable(
-            route =  "${listScreen.Topic.name}/{topicId}",
+            route = "${listScreen.Topic.name}/{topicId}",
             arguments = listOf(navArgument("topicId") { type = NavType.IntType })
         ) { backStackEntry ->
-            val topicId  = backStackEntry.arguments?.getInt("topicId") ?: 0
+            val topicId = backStackEntry.arguments?.getInt("topicId") ?: 0
             TopicScroll(
                 topicId = topicId,
                 navController = navController,
@@ -63,6 +61,19 @@ fun AppRouting(
         ) { backStackEntry ->
             val videoId = backStackEntry.arguments?.getInt("videoId") ?: 0
             VideoView(
+                videoId = videoId,
+                navController = navController,
+                viewModel = studyViewModel,
+                onClick = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = "${listScreen.Flashcard.name}/{videoId}",
+            arguments = listOf(navArgument("videoId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val videoId = backStackEntry.arguments?.getInt("videoId") ?: 0
+            FlashcardView(
                 videoId = videoId,
                 navController = navController,
                 viewModel = studyViewModel,

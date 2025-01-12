@@ -44,12 +44,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.vp_alp.R
+import com.example.vp_alp.route.listScreen
 import com.example.vp_alp.ui.theme.VP_ALPTheme
 import com.example.vp_alp.view.BottomNavigationBar
 import com.example.vp_alp.viewmodel.StudyViewModel
 
-
-//Study
 @Composable
 fun StudyScroll(
     viewModel: StudyViewModel = viewModel(factory = StudyViewModel.Factory),
@@ -103,7 +102,7 @@ fun StudyScroll(
                 TopicList(
                     topic_name = topic.topic_name,
                     onClick = {
-                        navController.navigate("topicView/${topic.id}")
+                        navController.navigate("${listScreen.Topic.name}/${topic.id}")
                     }
                 )
 
@@ -181,7 +180,7 @@ fun TopicList(
             }
 
             Image(
-                painter = painterResource(id = R.drawable.frame),
+                painter = painterResource(id = R.drawable.image_removebg_preview__1_),
                 contentDescription = "Lesson Image",
                 modifier = Modifier
                     .size(120.dp)

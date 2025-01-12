@@ -10,7 +10,6 @@ import com.example.vp_alp.model.GetAllVideoResponse
 import com.example.vp_alp.model.GetVideoResponse
 import com.example.vp_alp.model.Topic
 import com.example.vp_alp.model.Video
-import retrofit2.Call
 import retrofit2.Response
 
 //mengolah data dari backend spy bisa dimengerti di frontend

@@ -17,6 +17,7 @@ import com.example.vp_alp.model.GetAllCategoriesResponse
 import com.example.vp_alp.model.GetAllTopicResponse
 import com.example.vp_alp.model.GetAllVideoResponse
 import com.example.vp_alp.model.GetVideoResponse
+import com.example.vp_alp.model.Video
 import kotlinx.coroutines.launch
 
 
@@ -36,7 +37,7 @@ class StudyViewModel(
     private val _videos = mutableStateOf(GetAllVideoResponse(emptyList()))
     val videos: State<GetAllVideoResponse> = _videos
 
-    private val _video = mutableStateOf(GetVideoResponse(null.toString()))
+    private val _video = mutableStateOf(GetVideoResponse(Video()))
     val video: State<GetVideoResponse> = _video
 
     fun fetchCategories() {
@@ -83,8 +84,12 @@ class StudyViewModel(
         viewModelScope.launch {
             try {
                 val response = studyRepository.getVideos(topicId)
+                Log.d("API Response", "Response Body: ${response.body()}")
+
                 if (response.isSuccessful) {
                     _videos.value = GetAllVideoResponse(response.body()?.data ?: emptyList())
+                    Log.d("Video ID", "Fetching topics for videoId: $topicId")
+
                     Log.d("StudyViewModel", "Fetched videos: ${_videos.value}")
                 } else {
                     Log.e("StudyViewModel", "Error fetching videos: ${response.errorBody()}")
@@ -98,18 +103,21 @@ class StudyViewModel(
     fun getVideo(videoId: Int) {
         viewModelScope.launch {
             try {
-                val response = studyRepository.getTopics(categoryId)
+                val response = studyRepository.getVideo(videoId)
                 if (response.isSuccessful) {
-                    _topics.value = GetAllTopicResponse(response.body()?.data ?: emptyList())
-                    Log.d("StudyViewModel", "Fetched categories: ${_topics.value}")
+                    _video.value = GetVideoResponse(response.body()?.data ?: Video())
+                    Log.d("Video ID", "Fetching topics for videoId: $videoId")
+
+                    Log.d("StudyViewModel", "Fetched video: ${_video.value}")
                 } else {
-                    Log.e("StudyViewModel", "Error fetching categories: ${response.errorBody()}")
+                    Log.e("StudyViewModel", "Error fetching video: ${response.errorBody()}")
                 }
             } catch (e: Exception) {
-                Log.e("StudyViewModel", "Exception fetching categories: ${e.message}")
+                Log.e("StudyViewModel", "Exception fetching video: ${e.message}")
             }
         }
     }
+
 
     //jembatan antara view dengan viewmodel, kalo ga ada ini data yang dari view ke viewmodel ga bisa ke update
     companion object {

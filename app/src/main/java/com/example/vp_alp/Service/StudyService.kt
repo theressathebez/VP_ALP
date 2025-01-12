@@ -4,7 +4,6 @@ import com.example.vp_alp.model.GetAllCategoriesResponse
 import com.example.vp_alp.model.GetAllTopicResponse
 import com.example.vp_alp.model.GetAllVideoResponse
 import com.example.vp_alp.model.GetVideoResponse
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header

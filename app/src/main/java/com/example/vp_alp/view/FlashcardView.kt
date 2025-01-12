@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,18 +30,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.vp_alp.R
+import com.example.vp_alp.route.listScreen
 import com.example.vp_alp.ui.theme.VP_ALPTheme
+import com.example.vp_alp.viewmodel.StudyViewModel
 
 //Flashcard
 @Composable
-fun FlashcardView() {
+fun FlashcardView(
+    videoId: Int,
+    navController: NavController,
+    viewModel: StudyViewModel = viewModel(factory = StudyViewModel.Factory),
+    onClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly // Membuat elemen memiliki jarak proporsional
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Text(
             text = "FLASHCARD",
@@ -110,7 +120,10 @@ fun FlashcardView() {
                 .background(
                     color = Color(0xFFA35FEC), shape = RoundedCornerShape(30.dp)
                 )
-                .padding(horizontal = 4.dp, vertical = 12.dp),
+                .padding(horizontal = 4.dp, vertical = 12.dp)
+                .clickable {
+                    navController.navigate("${listScreen.Study.name}")
+                },
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -127,6 +140,6 @@ fun FlashcardView() {
 @Composable
 fun FlashcardViewPreview() {
     VP_ALPTheme {
-        FlashcardView()
+//        FlashcardView()
     }
 }

@@ -2,6 +2,7 @@ package com.example.vp_alp.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,12 +17,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.vp_alp.R
+import com.example.vp_alp.route.listScreen
 
 @Composable
 fun BottomNavigationBar(
     modifier: Modifier,
-    currentScreen: String
+    currentScreen: String,
+    navController: NavController
 ) {
     Row(
         modifier = Modifier
@@ -30,7 +34,12 @@ fun BottomNavigationBar(
             .padding(top= 8.dp, bottom = 24.dp, start = 16.dp, end = 16.dp),
         horizontalArrangement = Arrangement.SpaceAround
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.clickable {
+                navController.navigate("${listScreen.Study.name}")
+            }
+        ) {
             Image(
                 painter = painterResource(
                     if (currentScreen == "study")
@@ -48,7 +57,10 @@ fun BottomNavigationBar(
             )
         }
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.clickable {
+                navController.navigate("${listScreen.STT.name}")
+            }) {
             Image(
                 painter = painterResource(
                     if (currentScreen == "transcript")

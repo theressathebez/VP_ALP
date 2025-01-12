@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -47,136 +48,155 @@ fun STTView(
 ) {
     val text by viewModel.text.collectAsState()
     val context = LocalContext.current
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 16.dp, horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // New Column with light blue background and dark blue border
-        Column(
-            modifier = Modifier
-                .padding(vertical = 16.dp)
-                .fillMaxWidth()
-                .width(380.dp)
-                .height(58.dp)
-                .background(color = Color(0xFFF6F8FF)) // Light blue background
-                .border(
-                    border = BorderStroke(1.dp, Color(0xFF9AAEF8)), // Dark blue border
-                    shape = RoundedCornerShape(10.dp)
-                )
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Penyimpanan",
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 16.sp,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .width(80.dp)
-                        .height(24.dp)
-                        .clip(RoundedCornerShape(15.dp))
-                        .background(color = Color(0xFF5C469C))
-                        .clickable {
-                            navController.navigate(listScreen.SavedTexts.name)
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "See All",
-                        color = Color.White,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 12.sp,
-                    )
-                }
 
-            }
-        }
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+
+    ) {
         Column(
             modifier = Modifier
-                .padding(vertical = 16.dp)
                 .fillMaxWidth()
-                .width(380.dp)
-                .height(400.dp)
-                .background(color = Color(0xFFF6F8FF)) // Light blue background
-                .border(
-                    border = BorderStroke(1.dp, Color(0xFF9AAEF8)), // Dark blue border
-                    shape = RoundedCornerShape(10.dp)
-                )
+                .padding(vertical = 16.dp, horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.baseline_bookmark_border_24),
-                    contentDescription = "back",
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .width(30.dp)
-                        .height(30.dp)
-                )
-            }
+
+
             Column(
                 modifier = Modifier
-                    .padding(vertical = 8.dp, horizontal = 16.dp)
+                    .padding(vertical = 16.dp)
                     .fillMaxWidth()
                     .width(380.dp)
-                    .height(250.dp)
-                    .background(color = Color(0xFFFFFFFF)) // Light blue background
+                    .height(58.dp)
+                    .background(color = Color(0xFFF6F8FF)) // Light blue background
                     .border(
                         border = BorderStroke(1.dp, Color(0xFF9AAEF8)), // Dark blue border
                         shape = RoundedCornerShape(10.dp)
                     )
-            )  {
-                Text(
-                    text = "$text",
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp,
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
-                )
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Penyimpanan",
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .width(80.dp)
+                            .height(24.dp)
+                            .clip(RoundedCornerShape(15.dp))
+                            .background(color = Color(0xFF5C469C))
+                            .clickable {
+                                navController.navigate(listScreen.SavedTexts.name)
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "See All",
+                            color = Color.White,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp,
+                        )
+                    }
+
+                }
             }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
+            Column(
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
+                    .fillMaxWidth()
+                    .width(380.dp)
+                    .height(400.dp)
+                    .background(color = Color(0xFFF6F8FF)) // Light blue background
+                    .border(
+                        border = BorderStroke(1.dp, Color(0xFF9AAEF8)), // Dark blue border
+                        shape = RoundedCornerShape(10.dp)
+                    )
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.baseline_bookmark_border_24),
+                        contentDescription = "back",
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .width(30.dp)
+                            .height(30.dp)
+                    )
+                }
+                Column(
+                    modifier = Modifier
+                        .padding(vertical = 8.dp, horizontal = 16.dp)
+                        .fillMaxWidth()
+                        .width(380.dp)
+                        .height(250.dp)
+                        .background(color = Color(0xFFFFFFFF)) // Light blue background
+                        .border(
+                            border = BorderStroke(1.dp, Color(0xFF9AAEF8)), // Dark blue border
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                ) {
+                    Text(
+                        text = "$text",
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.baseline_delete_outline_24),
+                        contentDescription = "back",
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .width(30.dp)
+                            .height(30.dp)
+                            .clickable {
+                                viewModel.clearText()
+                            }
+                    )
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .size(80.dp) // Set size of the circle
+                    .clip(shape = RoundedCornerShape(50)) // Make the Box circular
+                    .background(color = Color(0xFFDDE4FB)) // Circle color
+                    .clickable {
+                        viewModel.askSpeechInput(context)
+                    },
+                contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.baseline_delete_outline_24),
-                    contentDescription = "back",
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .width(30.dp)
-                        .height(30.dp)
-                        .clickable {
-                            viewModel.clearText()
-                        }
+                    painter = painterResource(id = R.drawable.baseline_mic_none_24),
+                    contentDescription = "mic",
+                    modifier = Modifier.size(50.dp)
                 )
             }
+
+
         }
-        Box(
+        BottomNavigationBar(
             modifier = Modifier
-                .padding(top = 16.dp)
-                .size(80.dp) // Set size of the circle
-                .clip(shape = RoundedCornerShape(50)) // Make the Box circular
-                .background(color = Color(0xFFDDE4FB)) // Circle color
-                .clickable {
-                    viewModel.askSpeechInput(context)
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.baseline_mic_none_24),
-                contentDescription = "mic",
-                modifier = Modifier.size(50.dp)
-            )
-        }
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(bottom = 20.dp)
+                .navigationBarsPadding(),
+            currentScreen = "transcript",
+            navController = navController
+        )
+
     }
 }

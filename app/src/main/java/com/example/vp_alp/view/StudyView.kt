@@ -116,7 +116,8 @@ fun StudyScroll(
                 .background(Color.White)
                 .padding(bottom = 16.dp)
                 .navigationBarsPadding(),
-            currentScreen = "study"
+            currentScreen = "study",
+            navController = navController
         )
     }
 }

@@ -40,20 +40,18 @@ fun AppRouting(
 
     NavHost(
         navController = navController,
-        startDestination = listScreen.STT.name
+        startDestination = listScreen.Study.name
     ) {
-        composable(route = listScreen.Study.name) {
+        composable(route = "${listScreen.Study.name}") {
             StudyScroll(
                 navController = navController,
                 viewModel = studyViewModel
-        
-
-        
             )
         }
 
+        //transcript
         composable(
-            route = listScreen.STT.name
+            route = "${listScreen.STT.name}"
         ) {
             STTView(navController = navController, activity = activity, viewModel = viewModel)
         }

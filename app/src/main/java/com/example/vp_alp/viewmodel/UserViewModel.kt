@@ -31,15 +31,14 @@ import java.io.IOException
 class UserViewModel (
     private val userRepository: UserRepository
 ): ViewModel() {
-//    var dataStatus: ProfileDataStatusUIState by mutableStateOf(ProfileDataStatusUIState.Start)
-//        private set
+    var dataStatus: ProfileDataStatusUIState by mutableStateOf(ProfileDataStatusUIState.Start)
+        private set
     var logoutStatus: UserDataStatusUIState by mutableStateOf(UserDataStatusUIState.Start)
         private set
     var deleteStatus: UserDataStatusUIState by mutableStateOf(UserDataStatusUIState.Start)
         private set
 
-//    var dataStatus: TodoDataStatusUIState by mutableStateOf(TodoDataStatusUIState.Start)
-//        private set
+
 
     val username: StateFlow<String> = userRepository.currentUsername.stateIn(
         scope = viewModelScope,
@@ -59,6 +58,8 @@ class UserViewModel (
         initialValue = ""
     )
 
+
+
     fun logoutUser(token: String, navController: NavHostController) {
         viewModelScope.launch {
             logoutStatus = UserDataStatusUIState.Loading
@@ -76,7 +77,7 @@ class UserViewModel (
                             saveUsernameToken("Unknown", "Unknown")
 
                             navController.navigate(listScreen.Login.name) {
-                                popUpTo(listScreen.Study.name) {
+                                popUpTo(listScreen.Profile.name) {
                                     inclusive = true
                                 }
                             }
@@ -103,12 +104,12 @@ class UserViewModel (
         }
     }
 
-    fun deleteUser(token: String, userId: Int, navController: NavHostController) {
+    fun deleteUser(token: String, navController: NavHostController) {
         viewModelScope.launch {
             deleteStatus = UserDataStatusUIState.Loading
 
             try {
-                val call = userRepository.deleteUser(token, userId)
+                val call = userRepository.deleteUser(token)
 
                 call.enqueue(object: Callback<GeneralResponseModel> {
                     override fun onResponse(
@@ -120,7 +121,11 @@ class UserViewModel (
 
                             Log.d("delete-status", "Delete status: ${res.body()!!.data}")
 
-                            navController.popBackStack()
+                            navController.navigate(listScreen.Login.name) {
+                                popUpTo(listScreen.Profile.name) {
+                                    inclusive = true
+                                }
+                            }
                         } else {
                             val errorMessage = Gson().fromJson(
                                 res.errorBody()!!.charStream(),

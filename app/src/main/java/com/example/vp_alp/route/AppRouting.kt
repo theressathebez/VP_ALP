@@ -65,7 +65,7 @@ fun AppRouting(
         }
 
         composable(
-            listScreen.Login.name
+            route = listScreen.Login.name
         ) {
             LoginView(
                 authenticationViewModel = authenticationViewModel,
@@ -75,18 +75,18 @@ fun AppRouting(
         }
 
         composable(
-            listScreen.Profile.name
+            route = listScreen.Profile.name
         ) {
             ProfileView(
                 userViewModel = userViewModel,
                 token = token.value,
                 navController = navController,
-                context =localContext
+                context = localContext
             )
         }
 
         composable(
-            listScreen.Account.name
+            route = listScreen.Account.name
         ) {
             AccountView(
                 userViewModel = userViewModel,
@@ -95,28 +95,29 @@ fun AppRouting(
         }
 
         composable(
-            listScreen.ChangePass.name
+            route = listScreen.ChangePass.name
         ) {
             ChangePassView(
                 userViewModel = userViewModel,
                 token = token.value,
                 navController = navController,
-                context =localContext
+                context = localContext
             )
         }
 
         composable(
-            listScreen.DelAccount.name
+            route = listScreen.DelAccount.name
         ) {
             DelAccountView(
                 userViewModel = userViewModel,
                 navController = navController,
-                token = token.value
+                token = token.value,
+                context = localContext
             )
         }
 
         composable(
-            listScreen.UserFlashcard.name
+            route = listScreen.UserFlashcard.name
         ) {
             UserFlashcardView(
                 navController = navController,

@@ -1,74 +1,88 @@
 package com.example.vp_alp.view
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import com.example.vp_alp.R
+import com.example.vp_alp.viewModel.GameViewModel
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.vp_alp.ui.theme.VP_ALPTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+
 
 @Composable
-fun QuizView() {
+fun QuizView(navController: NavController, viewModel: GameViewModel = viewModel()) {
+    val question = viewModel.questions[viewModel.currentQuestionIndex.value]
+    val selectedAnswerIndex = viewModel.selectedAnswerIndex.value
 
-    Column {
-        Text(
-            text = "Pertanyaan",
-            color = Color.Black,
-            fontSize = 30.sp,
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.imagequiz),
+            contentDescription = "Image Quiz",
             modifier = Modifier
-                .padding(top = 100.dp, start = 20.dp)
+                .padding(40.dp)
+                .height(170.dp)
+                .width(360.dp)
+                .clip(RoundedCornerShape(30.dp))
+                .border(15.dp, Color(0xFFA35FEC), RoundedCornerShape(30.dp))
+        )
+        Text(
+            text = question.question,
+            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
         )
 
+        question.answers.forEachIndexed { index, answer ->
+            val backgroundColor = when {
+                selectedAnswerIndex == -1 -> Color(0xFFA35FEC)
+                index == question.correctAnswerIndex -> Color.Green
+                index == selectedAnswerIndex -> Color.Red
+                else -> Color(0xFFA35FEC)
+            }
 
-    }
-}
+            Box(
+                modifier = Modifier
+                    .width(350.dp)
+                    .height(80.dp)
+                    .background(backgroundColor)
+                    .clickable { viewModel.submitAnswer(index) },
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(text = answer)
+            }
+        }
 
-@Composable
-fun AnswerCard() {
-    Box(
-        modifier = Modifier
-    ) {
-        Column {
-            Row {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    Surface(
-                        color = Color.Blue,
-                        shape = MaterialTheme.shapes.small,
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(12.dp)
-                    ) {
-                        Text(
-                            text = "Number of Guesses",
-                            color = Color.White,
-                            modifier = Modifier
-                                .padding(6.dp)
-                        )
-                    }
-                }
-                Row {
-
-                }
+        if (selectedAnswerIndex != -1) {
+            Button(
+                onClick = { navController.navigate("result") },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text("Lanjut")
             }
         }
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true)
 @Composable
 fun QuizViewPreview() {
-    QuizView()
+    QuizView(navController = rememberNavController())
 }

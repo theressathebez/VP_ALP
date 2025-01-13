@@ -23,7 +23,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,22 +34,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.vp_alp.R
+import com.example.vp_alp.route.listScreen
 import com.example.vp_alp.ui.theme.VP_ALPTheme
 import com.example.vp_alp.viewmodel.StudyViewModel
-
 
 @Composable
 fun TopicScroll(
     topicId: Int,
     navController: NavController,
-    viewModel: StudyViewModel = viewModel(),
+    viewModel: StudyViewModel = viewModel(factory = StudyViewModel.Factory),
     onClick: () -> Unit
 ) {
-    val videos by viewModel.videos.collectAsState()
+    val videos by viewModel.videos
 
-    LaunchedEffect(topicId) {
-        viewModel.fetchVideosByTopicId(topicId)
+    LaunchedEffect(Unit) {
+        viewModel.fetchVideos(topicId)
     }
 
     Column(
@@ -82,28 +82,104 @@ fun TopicScroll(
             )
         }
 
-        // Topic Content
         LazyColumn(
             modifier = Modifier.padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(videos) { video ->
+            items(videos.data) { video ->
                 TopicView(
-                    title = video.title,
-                    description = video.description,
+                    title = video.video_name,
+                    foto = video.flashcard,
                     onClick = {
                         // Navigasi ke VideoView dengan videoId
-                        navController.navigate("videoView/${video.id}")
+                        navController.navigate("${listScreen.Video.name}/${video.id}")
                     }
                 )
             }
         }
+
+//        var isPlaying by remember {
+//            mutableStateOf(false)
+//        }
+//        var videoItemIndex by remember {
+//            mutableIntStateOf(0)
+//        }
+//        val viewModel: VideoPlayerViewModel = viewModel()
+//        viewModel.videoList = mainVideoList
+//
+//        val context = LocalContext.current
+//
+//        if (videos.data.isEmpty()) {
+//            Text(
+//                text = "No videos available",
+//                modifier = Modifier.align(Alignment.CenterHorizontally),
+//                color = Color.Gray,
+//                fontSize = 16.sp
+//            )
+//        } else {
+//            StreamerPlayer(
+//                viewModel = viewModel,
+//                isPlaying = isPlaying,
+//                onPlayerClosed = { isVideoPlaying ->
+//                    isPlaying = isVideoPlaying
+//                }
+//            )
+
+        // Topic Content
+//            LazyColumn(
+//                modifier = Modifier.padding(horizontal = 16.dp),
+//                verticalArrangement = Arrangement.spacedBy(12.dp)
+//            ) {
+//                itemsIndexed(items = mainVideoList) { index, item ->
+//                    Row(
+//                        Modifier
+//                            .fillMaxWidth()
+//                            .clickable {
+//                                if (videoItemIndex != index) isPlaying = false
+//                                viewModel.index = index
+//                                videoItemIndex = viewModel.index
+//                            },
+//                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+//                        verticalAlignment = Alignment.Bottom
+//                    ) {
+//                        AsyncImage(
+//                            model = item.thumbnail,
+//                            contentDescription = "Thumbnail",
+//                            modifier = Modifier.size(75.dp)
+//                        )
+//                        Text(
+//                            text = "Video ${index + 1}",
+//                            Modifier
+//                                .fillMaxSize()
+//                                .weight(1f)
+//                        )
+//
+//                        Divider(
+//                            Modifier
+//                                .fillMaxWidth()
+//                                .padding(vertical = 6.dp)
+//                        )
+//                    }
+//                }
+//            }
+//
+//            LaunchedEffect(key1 = videoItemIndex) {
+//                isPlaying = true
+//                viewModel.apply {
+//                    releasePlayer()
+//                    initializePlayer(context)
+//                    playVideo()
+//                }
+//            }
+
+
     }
 }
 
+
 @Composable
 fun TopicView(
-    title: String, description: String, onClick: () -> Unit
+    title: String, foto: String, onClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -121,10 +197,16 @@ fun TopicView(
     ) {
         // Profile Image
         Image(
-            painter = painterResource(id = R.drawable.group_410),
-            contentDescription = "Profile Picture",
+            painter = painterResource(id = R.drawable.image_removebg_preview__2_),
+            contentDescription = "preview",
             modifier = Modifier.size(75.dp)
         )
+
+//        AsyncImage(
+//            model = foto,
+//            contentDescription = "Thumbnail",
+//            modifier = Modifier.size(75.dp)
+//        )
 
         // Text Content
         Column(
@@ -134,9 +216,6 @@ fun TopicView(
         ) {
             Text(
                 text = title, fontSize = 14.sp, fontWeight = FontWeight.Normal, color = Color.Gray
-            )
-            Text(
-                text = description, fontSize = 18.sp, fontWeight = FontWeight.SemiBold
             )
         }
 

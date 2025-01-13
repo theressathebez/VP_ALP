@@ -1,49 +1,77 @@
 package com.example.vp_alp.Repository
 
+import com.example.todolistapp.services.StudyService
 import com.example.vp_alp.model.Category
+import com.example.vp_alp.model.FlashcardRequest
+import com.example.vp_alp.model.GeneralResponseModel
+import com.example.vp_alp.model.GetAllCategoriesResponse
+import com.example.vp_alp.model.GetAllTopicResponse
+import com.example.vp_alp.model.GetAllVideoResponse
+import com.example.vp_alp.model.GetVideoResponse
 import com.example.vp_alp.model.Topic
 import com.example.vp_alp.model.Video
+import retrofit2.Response
 
-class StudyRepository {
-    // Dummy Data
-    private val categories = listOf(
-        Category(1, "Perkenalan"),
-        Category(2, "Keluarga"),
-        Category(3, "Sekolah"),
-        Category(4, "Pekerjaan"),
-        Category(5, "Perasaan")
-    )
+//mengolah data dari backend spy bisa dimengerti di frontend
+interface StudyRepository {
+    suspend fun getCategories(): Response<GetAllCategoriesResponse>
 
-    private val topics = listOf(
-        Topic(1, 1, "Alfabet", "10 mins"),
-        Topic(2, 1, "Menyapa", "15 mins"),
-        Topic(3, 1, "Angka", "20 mins"),
-        Topic(4, 1, "Waktu", "25 mins"),
-        Topic(5, 2, "Alat Tulis", "10 mins"),
-        Topic(6, 2, "Olahraga", "15 mins"),
-        Topic(7, 2, "Mata Pelajaran", "20 mins"),
-        Topic(8, 3, "Alat Tulis Sekolah", "10 mins"),
-        Topic(9, 3, "Olahraga Sekolah", "15 mins")
-    )
+    suspend fun getTopics(categoryId: Int): Response<GetAllTopicResponse>
 
-    private val videos = listOf(
-        Video(1, 1, "Video 1", "Intro to Topic 1", "https://www.youtube.com/watch?v=qOD9M95_fS0"),
-        Video(2, 2, "Video 2", "Intro to Topic 2", "https://example.com/video2"),
-        Video(3, 1, "Video 3", "Intro to Topic 3", "https://example.com/video3"),
-        Video(4, 3, "Video 4", "Intro to Topic 4", "https://example.com/video4")
-    )
+    suspend fun getVideos(topicId: Int): Response<GetAllVideoResponse>
 
-    fun getCategories(): List<Category> = categories
+    suspend fun getVideo(videoId: Int): Response<GetVideoResponse>
 
-    fun getTopicsByCategoryId(categoryId: Int): List<Topic> {
-        return topics.filter { it.categoryId == categoryId }
-    }
-
-    fun getVideosByTopicId(topicId: Int): List<Video> {
-        return videos.filter { it.topicId == topicId }
-    }
-
-    fun getVideoById(videoId: Int): Video? {
-        return videos.find { it.id == videoId }
-    }
+//    fun saveFlashcard(
+//        token: String,
+//        videoUrl: String,
+//        flashcard: String
+//    ): Call<GeneralResponseModel>
+//
+//    fun getFlashcard(token: String, userId: Int): Call<GetVideoResponse>
+//
+//    fun deleteFlashcard(token: String, userId: Int): Call<GeneralResponseModel>
 }
+
+
+class NetworkStudyRepository(
+    private val studyService: StudyService
+) : StudyRepository {
+
+    override suspend fun getCategories(): Response<GetAllCategoriesResponse> {
+        return studyService.getCategories()
+    }
+
+    override suspend fun getTopics(categoryId: Int): Response<GetAllTopicResponse> {
+        return studyService.getTopics(categoryId)
+    }
+
+    override suspend fun getVideos(topicId: Int): Response<GetAllVideoResponse> {
+        return studyService.getVideos(topicId)
+    }
+
+    override suspend fun getVideo(videoId: Int): Response<GetVideoResponse> {
+        return studyService.getVideo(videoId)
+    }
+
+//    override fun getFlashcard(token: String, userId: Int): Call<GetVideoResponse> {
+//        return studyService.getFlashcard(token, userId)
+//    }
+//
+//    override fun saveFlashcard(
+//        token: String,
+//        videoUrl: String,
+//        flashcard: String
+//    ): Call<GeneralResponseModel> {
+//        return studyService.saveFlashcard(
+//            token,
+//            FlashcardRequest(videoUrl, flashcard)
+//        )
+//    }
+//
+//    override fun deleteFlashcard(token: String, userId: Int): Call<GeneralResponseModel> {
+//        return studyService.deleteFlashcard(token, userId)
+//    }
+}
+
+

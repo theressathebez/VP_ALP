@@ -1,3 +1,4 @@
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,7 +28,7 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,61 +44,80 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.vp_alp.R
+import com.example.vp_alp.route.listScreen
 import com.example.vp_alp.ui.theme.VP_ALPTheme
+import com.example.vp_alp.view.BottomNavigationBar
 import com.example.vp_alp.viewmodel.StudyViewModel
 
 @Composable
 fun StudyScroll(
-    viewModel: StudyViewModel = viewModel(),
-    navController: NavController
+    viewModel: StudyViewModel = viewModel(factory = StudyViewModel.Factory),
+    navController: NavController,
 ) {
-    val categories by viewModel.categories.collectAsState()
-    val topics by viewModel.topics.collectAsState()
+    val categories by viewModel.categories
+    val topics by viewModel.topics
 
-    var selectedCategoryId by remember { mutableStateOf<Int?>(null) }
+    var selectedCategoryId by remember { mutableStateOf(viewModel.categoryId) }
 
-    LazyColumn(
+    LaunchedEffect(Unit) {
+        viewModel.fetchCategories()
+    }
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(horizontal = 4.dp, vertical = 16.dp)
     ) {
-        item {
-            StudyView()
-        }
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .background(Color.White)
+                .padding(horizontal = 16.dp, vertical = 16.dp)
+        ) {
+            item {
+                StudyView()
+            }
 
-        item {
-            LazyRow(
-                modifier = Modifier
-                    .padding(vertical = 8.dp, horizontal = 16.dp)
-            ) {
-                items(categories) { category ->
-                    CatList(
-                        categoryName = category.name,
-                        isSelected = category.id == selectedCategoryId,
-                        onClick = {
-                            // Set selected category and fetch topics
-                            selectedCategoryId = category.id
-                            viewModel.fetchTopicsByCategoryId(category.id)
-                        }
-                    )
+            item {
+                LazyRow(modifier = Modifier.padding(vertical = 16.dp)) {
+                    items(categories.data) { category ->
+                        CatList(
+                            categoryName = category.name,
+                            isSelected = category.id == selectedCategoryId,
+                            onClick = {
+                                selectedCategoryId = category.id
+                                viewModel.fetchTopics(category.id)
+                            }
+                        )
+
+                        Spacer(modifier = Modifier.width(5.dp))
+                    }
                 }
+
+            }
+
+            items(topics.data) { topic ->
+                Log.d("StudyScroll", "Topic: ${topic.topic_name}, ID: ${topic.id}")
+
+                TopicList(
+                    topic_name = topic.topic_name,
+                    onClick = {
+                        navController.navigate("${listScreen.Topic.name}/${topic.id}")
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(14.dp))
             }
         }
 
-        items(topics) { topic ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .clickable {
-                        navController.navigate("topicScroll/${topic.id}")
-                    },
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                TopicList(title = topic.title, duration = topic.duration)
-            }
-        }
+        BottomNavigationBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(bottom = 16.dp)
+                .navigationBarsPadding(),
+            currentScreen = "study"
+        )
     }
 }
 
@@ -127,8 +148,8 @@ fun CatList(
 
 @Composable
 fun TopicList(
-    title: String,
-    duration: String
+    topic_name: String,
+    onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -138,10 +159,11 @@ fun TopicList(
             )
             .border(
                 border = BorderStroke(1.dp, Color(0xFFA35FED)),
-                shape = RoundedCornerShape(15.dp)
+                shape = RoundedCornerShape(18.dp)
             )
             .padding(16.dp)
             .fillMaxWidth()
+            .clickable(onClick = onClick)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -151,20 +173,14 @@ fun TopicList(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = title,
+                    text = topic_name,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.SemiBold
-                )
-                Text(
-                    text = duration,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = Color.Gray
                 )
             }
 
             Image(
-                painter = painterResource(id = R.drawable.frame),
+                painter = painterResource(id = R.drawable.image_removebg_preview__1_),
                 contentDescription = "Lesson Image",
                 modifier = Modifier
                     .size(120.dp)
@@ -179,7 +195,7 @@ fun StudyView() {
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(16.dp)
+            .padding(vertical = 16.dp)
     ) {
         Row(
             modifier = Modifier

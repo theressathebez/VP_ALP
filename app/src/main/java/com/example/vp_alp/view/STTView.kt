@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -49,18 +50,18 @@ fun STTView(
     val text by viewModel.text.collectAsState()
     val context = LocalContext.current
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
 
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp, horizontal = 16.dp),
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-
             Column(
                 modifier = Modifier
                     .padding(vertical = 16.dp)
@@ -185,8 +186,6 @@ fun STTView(
                     modifier = Modifier.size(50.dp)
                 )
             }
-
-
         }
         BottomNavigationBar(
             modifier = Modifier

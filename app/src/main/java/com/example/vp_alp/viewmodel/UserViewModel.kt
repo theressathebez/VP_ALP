@@ -51,6 +51,9 @@ class UserViewModel (
 //            return _userDataStatusUIState.asStateFlow()
 //        }
 
+//    var dataStatus: TodoDataStatusUIState by mutableStateOf(TodoDataStatusUIState.Start)
+//        private set
+
     val username: StateFlow<String> = userRepository.currentUsername.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
@@ -88,7 +91,7 @@ class UserViewModel (
                             saveUsernameToken("Unknown", "Unknown")
 
                             navController.navigate(listScreen.Login.name) {
-                                popUpTo(listScreen.Profile.name) {
+                                popUpTo(listScreen.Study.name) {
                                     inclusive = true
                                 }
                             }

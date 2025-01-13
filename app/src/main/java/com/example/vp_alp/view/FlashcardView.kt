@@ -89,13 +89,13 @@ fun FlashcardView(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-//                    Image(
-//                        painter = painterResource(id = R.drawable.group_369),
-//                        contentDescription = "Profile Picture",
-//                        modifier = Modifier
-//                            .size(220.dp)
-//                            .padding(bottom = 16.dp)
-//                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.group_369),
+                        contentDescription = "Profile Picture",
+                        modifier = Modifier
+                            .size(220.dp)
+                            .padding(bottom = 16.dp)
+                    )
 
                     Text(
                         text = "Senang bertemu denganmu",

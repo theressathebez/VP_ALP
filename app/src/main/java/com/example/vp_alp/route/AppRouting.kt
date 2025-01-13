@@ -17,10 +17,16 @@ import com.example.vp_alp.view.AccountView
 import com.example.vp_alp.view.ChangePassView
 import com.example.vp_alp.view.DelAccountView
 import com.example.vp_alp.view.FlashcardView
+import com.example.vp_alp.enums.listScreen
+import com.example.vp_alp.view.AccountView
+import com.example.vp_alp.view.ChangePassView
+import com.example.vp_alp.view.DelAccountView
 import com.example.vp_alp.view.LoginView
 import com.example.vp_alp.view.ProfileView
+import com.example.vp_alp.view.RegisterPreview
 import com.example.vp_alp.view.RegisterView
 import com.example.vp_alp.view.TopicScroll
+import com.example.vp_alp.view.UserFlashcardView
 import com.example.vp_alp.view.VideoView
 import com.example.vp_alp.viewmodel.StudyViewModel
 
@@ -33,6 +39,8 @@ import com.example.vp_alp.viewmodel.AuthenticationViewModel
 import com.example.vp_alp.viewmodel.STTViewModel
 import com.example.vp_alp.viewmodel.UserViewModel
 
+
+
 @Composable
 fun AppRouting(
     navController: NavHostController = rememberNavController(),
@@ -42,6 +50,9 @@ fun AppRouting(
     activity: Activity, viewModel: STTViewModel
 ) {
     val localContext = LocalContext.current
+    val token = userViewModel.token.collectAsState()
+
+val localContext = LocalContext.current
     val token = userViewModel.token.collectAsState()
 
     NavHost(

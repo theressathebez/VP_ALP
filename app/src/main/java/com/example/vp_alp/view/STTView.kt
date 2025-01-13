@@ -35,7 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.vp_alp.R
-import com.example.vp_alp.route.listScreen
+import com.example.vp_alp.enums.listScreen
 
 import com.example.vp_alp.viewmodel.STTViewModel
 

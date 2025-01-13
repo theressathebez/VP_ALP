@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,7 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.vp_alp.R
-import com.example.vp_alp.route.listScreen
+import com.example.vp_alp.enums.listScreen
 import com.example.vp_alp.ui.theme.VP_ALPTheme
 import com.example.vp_alp.viewmodel.StudyViewModel
 
@@ -133,6 +134,15 @@ fun FlashcardView(
                 color = Color.White,
             )
         }
+        BottomNavigationBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(bottom = 16.dp)
+                .navigationBarsPadding(),
+            currentScreen = "profile",
+            navController = navController
+        )
     }
 }
 

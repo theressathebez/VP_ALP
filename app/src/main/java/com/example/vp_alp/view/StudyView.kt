@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.vp_alp.R
-import com.example.vp_alp.route.listScreen
+import com.example.vp_alp.enums.listScreen
 import com.example.vp_alp.ui.theme.VP_ALPTheme
 import com.example.vp_alp.view.BottomNavigationBar
 import com.example.vp_alp.viewmodel.StudyViewModel

@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.vp_alp.R
-import com.example.vp_alp.route.listScreen
+import com.example.vp_alp.enums.listScreen
 
 @Composable
 fun BottomNavigationBar(
@@ -96,7 +96,9 @@ fun BottomNavigationBar(
             )
         }
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable {
+            navController.navigate("${listScreen.Profile.name}")
+        }) {
             Image(
                 painter = painterResource(
                     if (currentScreen == "profile")

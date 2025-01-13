@@ -9,16 +9,36 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import androidx.datastore.preferences.core.Preferences
+import com.example.vp_alp.Repository.AuthenticationRepository
+import com.example.vp_alp.Repository.NetworkAuthenticationRepository
+import com.example.vp_alp.Repository.NetworkUserRepository
+import com.example.vp_alp.Repository.UserRepository
+import com.example.vp_alp.Service.AuthenticationAPIService
+import com.example.vp_alp.Service.UserAPIService
 
 //buat jembatan nya antara backend sama frontend, biar bisa diakses
 interface AppContainer {
     val studyRepository: StudyRepository
+    val authenticationRepository: AuthenticationRepository
+    val userRepository: UserRepository
 }
 
 class DefaultAppContainer(
     private val userDataStore: DataStore<Preferences>
 ) : AppContainer {
     private val APIBaseUrl = "http://10.0.2.2:3000/"
+
+    private val authenticationRetrofitService: AuthenticationAPIService by lazy {
+        val retrofit = initRetrofit()
+
+        retrofit.create(AuthenticationAPIService::class.java)
+    }
+
+    private val userRetrofitService: UserAPIService by lazy {
+        val retrofit = initRetrofit()
+
+        retrofit.create(UserAPIService::class.java)
+    }
 
     // RETROFIT SERVICE
     private val studyRetrofitService: StudyService by lazy {
@@ -29,6 +49,14 @@ class DefaultAppContainer(
     // REPOSITORY INIT
     override val studyRepository: StudyRepository by lazy {
         NetworkStudyRepository(studyRetrofitService)
+    }
+
+    override val authenticationRepository: AuthenticationRepository by lazy {
+        NetworkAuthenticationRepository(authenticationRetrofitService)
+    }
+
+    override val userRepository: UserRepository by lazy {
+        NetworkUserRepository(userDataStore, userRetrofitService)
     }
 
     private fun initRetrofit(): Retrofit {

@@ -3,6 +3,7 @@ package com.example.vp_alp.route
 import StudyScroll
 import android.app.Activity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -11,7 +12,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.vp_alp.enums.listScreen
+import com.example.vp_alp.view.AccountView
+import com.example.vp_alp.view.ChangePassView
+import com.example.vp_alp.view.DelAccountView
 import com.example.vp_alp.view.FlashcardView
+import com.example.vp_alp.view.LoginView
+import com.example.vp_alp.view.ProfileView
+import com.example.vp_alp.view.RegisterView
 import com.example.vp_alp.view.TopicScroll
 import com.example.vp_alp.view.VideoView
 import com.example.vp_alp.viewmodel.StudyViewModel
@@ -19,28 +27,31 @@ import com.example.vp_alp.viewmodel.StudyViewModel
 import com.example.vp_alp.view.STTSavedView
 import com.example.vp_alp.view.STTView
 import com.example.vp_alp.view.TopicScroll
+import com.example.vp_alp.view.UserFlashcardView
 import com.example.vp_alp.view.VideoView
+import com.example.vp_alp.viewmodel.AuthenticationViewModel
 import com.example.vp_alp.viewmodel.STTViewModel
-
-enum class listScreen {
-    STT,
-    SavedTexts,
-    Study,
-    Topic,
-    Video,
-    Flashcard
-}
+import com.example.vp_alp.viewmodel.UserViewModel
 
 @Composable
 fun AppRouting(
     navController: NavHostController = rememberNavController(),
     studyViewModel: StudyViewModel = viewModel(factory = StudyViewModel.Factory),
+    authenticationViewModel: AuthenticationViewModel = viewModel(factory = AuthenticationViewModel.Factory),
+    userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory),
     activity: Activity, viewModel: STTViewModel
 ) {
+    val localContext = LocalContext.current
+    val token = userViewModel.token.collectAsState()
 
     NavHost(
         navController = navController,
-        startDestination = listScreen.Study.name
+        startDestination =
+        if (token.value != "Unknown" && token.value != "") {
+            listScreen.Login.name
+        } else {
+            listScreen.Login.name
+        }
     ) {
         composable(route = "${listScreen.Study.name}") {
             StudyScroll(
@@ -48,6 +59,78 @@ fun AppRouting(
                 viewModel = studyViewModel
             )
         }
+
+        composable(
+            route = listScreen.Register.name
+        ) {
+            RegisterView(
+                authenticationViewModel = authenticationViewModel,
+                navController = navController,
+                context = localContext
+            )
+        }
+
+        composable(
+            listScreen.Login.name
+        ) {
+            LoginView(
+                authenticationViewModel = authenticationViewModel,
+                navController = navController,
+                context = localContext
+            )
+        }
+
+        composable(
+            listScreen.Profile.name
+        ) {
+            ProfileView(
+                userViewModel = userViewModel,
+                token = token.value,
+                navController = navController,
+                context = localContext
+            )
+        }
+
+        composable(
+            listScreen.Account.name
+        ) {
+            AccountView(
+                userViewModel = userViewModel,
+                navController = navController
+            )
+        }
+
+        composable(
+            listScreen.ChangePass.name
+        ) {
+            ChangePassView(
+                userViewModel = userViewModel,
+                token = token.value,
+                navController = navController,
+                context = localContext
+            )
+        }
+
+        composable(
+            listScreen.DelAccount.name
+        ) {
+            DelAccountView(
+                userViewModel = userViewModel,
+                navController = navController,
+                token = token.value,
+                context =localContext
+            )
+        }
+
+        composable(
+            listScreen.UserFlashcard.name
+        ) {
+            UserFlashcardView(
+                navController = navController,
+                token = token.value
+            )
+        }
+
 
         //transcript
         composable(

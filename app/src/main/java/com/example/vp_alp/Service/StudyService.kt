@@ -29,12 +29,15 @@ interface StudyService {
     suspend fun getVideo(@Path("videoId") videoId: Int): Response<GetVideoResponse>
 
 //
-//    @GET("api/users/{id}/videos")
-//    fun getFlashcard(@Header("X-API-TOKEN") token: String, @Path("id") todoId: Int): Call<GetTodoResponse>
+//object StudyService {
+//    fun fetchCategories(): List<Category> = StudyRepository.getCategories()
 //
-//    @POST("api/users/{id}/videos/{id}")
-//    fun saveFlashcard(@Header("X-API-TOKEN") token: String, @Body todoModel: TodoRequest): Call<GeneralResponseModel>
+//    fun fetchTopicsByCategoryId(categoryId: Int): List<Topic>? =
+//        StudyRepository.getCategoryById(categoryId)?.topics
 //
 //    @DELETE("api/users/{id}/videos/{id}")
 //    fun deleteFlashcard(@Header("X-API-TOKEN") token: String, @Path("id") todoId: Int): Call<GeneralResponseModel>
 }
+//    fun fetchVideosByTopicId(topicId: Int): List<Video>? =
+//        StudyRepository.getTopicById(topicId)?.videos
+//}

@@ -217,6 +217,9 @@ fun TopicView(
             Text(
                 text = title, fontSize = 14.sp, fontWeight = FontWeight.Normal, color = Color.Gray
             )
+            Text(
+                text = description, fontSize = 18.sp, fontWeight = FontWeight.SemiBold
+            )
         }
 
         // Continue Button with Icon

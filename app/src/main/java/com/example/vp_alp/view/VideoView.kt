@@ -37,7 +37,7 @@ import com.example.vp_alp.viewmodel.StudyViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 
-
+//
 @Composable
 fun VideoView(
     videoId: Int,

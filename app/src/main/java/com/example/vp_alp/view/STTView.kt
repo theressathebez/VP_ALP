@@ -170,3 +170,10 @@ fun STTView(
         }
     }
 }
+@Preview(showBackground = true)
+@Composable
+fun STTViewPreview() {
+    VP_ALPTheme {
+        STTView(activity = Activity())
+    }
+}

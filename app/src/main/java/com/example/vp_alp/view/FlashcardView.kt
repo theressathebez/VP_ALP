@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.example.vp_alp.R
 import com.example.vp_alp.ui.theme.VP_ALPTheme
 
+//Flashcard
 @Composable
 fun FlashcardView() {
     Column(

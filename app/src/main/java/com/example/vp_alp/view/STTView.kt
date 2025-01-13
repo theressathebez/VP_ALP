@@ -11,8 +11,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -32,28 +35,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.example.vp_alp.R
 import com.example.vp_alp.route.listScreen
-
 import com.example.vp_alp.viewmodel.STTViewModel
 
 @Composable
 fun STTView(
-    viewModel: STTViewModel
-    = viewModel(),
+    viewModel: STTViewModel = viewModel(),
     activity: Activity,
     navController: NavController
 ) {
     val text by viewModel.text.collectAsState()
     val context = LocalContext.current
+
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(vertical = 16.dp, horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // New Column with light blue background and dark blue border
+        // Column with light blue background and dark blue border
         Column(
             modifier = Modifier
                 .padding(vertical = 16.dp)
@@ -97,7 +98,6 @@ fun STTView(
                         fontSize = 12.sp,
                     )
                 }
-
             }
         }
         Column(
@@ -131,12 +131,12 @@ fun STTView(
                     .fillMaxWidth()
                     .width(380.dp)
                     .height(250.dp)
-                    .background(color = Color(0xFFFFFFFF)) // Light blue background
+                    .background(color = Color(0xFFFFFFFF)) // White background
                     .border(
                         border = BorderStroke(1.dp, Color(0xFF9AAEF8)), // Dark blue border
                         shape = RoundedCornerShape(10.dp)
                     )
-            )  {
+            ) {
                 Text(
                     text = "$text",
                     fontWeight = FontWeight.Normal,
@@ -150,7 +150,7 @@ fun STTView(
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.baseline_delete_outline_24),
-                    contentDescription = "back",
+                    contentDescription = "delete",
                     modifier = Modifier
                         .padding(16.dp)
                         .width(30.dp)
@@ -178,5 +178,20 @@ fun STTView(
                 modifier = Modifier.size(50.dp)
             )
         }
+
+
+    }
+    Column {
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        BottomNavigationBar(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .navigationBarsPadding(),
+            currentScreen = "transcript",
+            navController = navController
+        )
     }
 }

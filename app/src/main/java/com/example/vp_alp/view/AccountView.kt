@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.vp_alp.R
 import com.example.vp_alp.enums.listScreen
@@ -44,7 +43,7 @@ import com.example.vp_alp.viewmodel.UserViewModel
 @Composable
 fun AccountView(
     userViewModel: UserViewModel,
-    navController: NavHostController
+    navController: NavController
 ) {
     val email = userViewModel.email.collectAsState()
 

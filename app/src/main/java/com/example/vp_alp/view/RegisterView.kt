@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -130,7 +131,7 @@ fun RegisterView(
                 ) {
                     Column(
                         modifier = Modifier
-                            .offset(x = 45.dp, y = 30.dp)
+                            .offset(x = 55.dp, y = 30.dp)
                     ) {
                         Text(
                             "Username",
@@ -262,6 +263,15 @@ fun RegisterView(
 
             }
         }
+        BottomNavigationBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(bottom = 16.dp)
+                .navigationBarsPadding(),
+            currentScreen = "profile",
+            navController = navController
+        )
     }
 }
 

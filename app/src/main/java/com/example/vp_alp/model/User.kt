@@ -11,3 +11,7 @@ data class UserModel (
     val password: String,
     val token: String?
 )
+
+data class UserRequest (
+    val password: String
+)

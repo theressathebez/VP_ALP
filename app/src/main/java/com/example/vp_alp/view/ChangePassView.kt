@@ -45,8 +45,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.vp_alp.R
 import com.example.vp_alp.uiStates.UserDataStatusUIState
-import androidx.navigation.compose.rememberNavController
-import com.example.vp_alp.R
 import com.example.vp_alp.viewmodel.UserViewModel
 
 
@@ -170,19 +168,6 @@ fun ChangePassView(
                         Button (
                             onClick = {
 //                                userViewModel.updateUser(token, navController)
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF5C469C)
-                            ),
-                            modifier = Modifier
-                                .width(305.dp)
-                                .height(55.dp)
-                                .padding(top = 5.dp, bottom = 5.dp)
-                                .offset(y = 20.dp)
-                        )
-                        Button (
-                            onClick = {
-
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF5C469C)

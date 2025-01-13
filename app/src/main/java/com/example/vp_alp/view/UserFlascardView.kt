@@ -96,53 +96,32 @@ fun UserFlashcardView(
                             modifier = Modifier
                                 .offset(y = 20.dp)
                         ) {
-                                Row (
+                            Row (
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 30.dp)
+                                    .offset(y = (-318.dp)),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Button (
+                                    onClick = {
+
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = Color(0xFFE3CAFF),
+                                        contentColor = Color(0xFF263238)
+                                    ),
+                                    border = BorderStroke(1.dp, Color(0xFFD7B4FF)),
                                     modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 30.dp)
-                                        .offset(y = (-318.dp)),
-                                    horizontalArrangement = Arrangement.SpaceBetween
+                                        .width(150.dp)
+                                        .height(350.dp),
+                                    shape = RoundedCornerShape(14.dp)
                                 ) {
-                                    Button (
-                                        onClick = {
-
-                                        },
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = Color(0xFFE3CAFF),
-                                            contentColor = Color(0xFF263238)
-                                        ),
-                                        border = BorderStroke(1.dp, Color(0xFFD7B4FF)),
+                                    Text(
+                                        "B b",
                                         modifier = Modifier
-                                            .width(150.dp)
-                                            .height(350.dp),
-                                        shape = RoundedCornerShape(14.dp)
-                                    ) {
-                                        Text(
-                                            "B b",
-                                            modifier = Modifier
-                                                .offset(y = 65.dp)
-                                        )
-                                    }
-                                    Button (
-                                        onClick = {
-
-                                        },
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = Color(0xFFFFE18E),
-                                            contentColor = Color(0xFF263238)
-                                        ),
-                                        border = BorderStroke(1.dp, Color(0xFFFFD664)),
-                                        modifier = Modifier
-                                            .width(150.dp)
-                                            .height(350.dp),
-                                        shape = RoundedCornerShape(14.dp)
-                                    ) {
-                                        Text(
-                                            "Terima Kasih",
-                                            modifier = Modifier
-                                                .offset(y = 65.dp)
-                                        )
-                                    }
+                                            .offset(y = 65.dp)
+                                    )
                                 }
                                 Button (
                                     onClick = {
@@ -154,52 +133,65 @@ fun UserFlashcardView(
                                     ),
                                     border = BorderStroke(1.dp, Color(0xFFFFD664)),
                                     modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 30.dp)
-                                        .offset(y = (-110.dp)),
-                                    horizontalArrangement = Arrangement.SpaceBetween
+                                        .width(150.dp)
+                                        .height(350.dp),
+                                    shape = RoundedCornerShape(14.dp)
                                 ) {
-                                    Button (
-                                        onClick = {
-
-                                        },
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = Color(0xFFDCEEFF),
-                                            contentColor = Color(0xFF263238)
-                                        ),
-                                        border = BorderStroke(1.dp, Color(0xFFB2DAFF)),
+                                    Text(
+                                        "Terima Kasih",
                                         modifier = Modifier
-                                            .width(150.dp)
-                                            .height(350.dp),
-                                        shape = RoundedCornerShape(14.dp)
-                                    ) {
-                                        Text(
-                                            "Halo",
-                                            modifier = Modifier
-                                                .offset(y = 65.dp)
-                                        )
-                                    }
-                                    Button (
-                                        onClick = {
-
-                                        },
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = Color(0xFFFFC890),
-                                            contentColor = Color(0xFF263238)
-                                        ),
-                                        border = BorderStroke(1.dp, Color(0xFFFFAD59)),
-                                        modifier = Modifier
-                                            .width(150.dp)
-                                            .height(350.dp),
-                                        shape = RoundedCornerShape(14.dp)
-                                    ) {
-                                        Text(
-                                            "8",
-                                            modifier = Modifier
-                                                .offset(y = 65.dp)
-                                        )
-                                    }
+                                            .offset(y = 65.dp)
+                                    )
                                 }
+                            }
+                            Row (
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 30.dp)
+                                    .offset(y = (-110.dp)),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Button (
+                                    onClick = {
+
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = Color(0xFFDCEEFF),
+                                        contentColor = Color(0xFF263238)
+                                    ),
+                                    border = BorderStroke(1.dp, Color(0xFFB2DAFF)),
+                                    modifier = Modifier
+                                        .width(150.dp)
+                                        .height(350.dp),
+                                    shape = RoundedCornerShape(14.dp)
+                                ) {
+                                    Text(
+                                        "Halo",
+                                        modifier = Modifier
+                                            .offset(y = 65.dp)
+                                    )
+                                }
+                                Button (
+                                    onClick = {
+
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = Color(0xFFFFC890),
+                                        contentColor = Color(0xFF263238)
+                                    ),
+                                    border = BorderStroke(1.dp, Color(0xFFFFAD59)),
+                                    modifier = Modifier
+                                        .width(150.dp)
+                                        .height(350.dp),
+                                    shape = RoundedCornerShape(14.dp)
+                                ) {
+                                    Text(
+                                        "8",
+                                        modifier = Modifier
+                                            .offset(y = 65.dp)
+                                    )
+                                }
+                            }
                         }
                     }
                 }

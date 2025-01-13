@@ -19,7 +19,8 @@ interface UserRepository {
     val currentEmail: Flow<String>
 
     fun logout(token: String): Call<GeneralResponseModel>
-    fun deleteUser(token: String, userId: Int): Call<GeneralResponseModel>
+    //    fun updateUser(token: String, password: String): Call<GeneralResponseModel>
+    fun deleteUser(token: String): Call<GeneralResponseModel>
 
     suspend fun saveUserToken(token: String)
     suspend fun saveUsername(username: String)
@@ -34,6 +35,7 @@ class NetworkUserRepository(
         val USER_TOKEN = stringPreferencesKey("token")
         val USERNAME = stringPreferencesKey("username")
         val EMAIL = stringPreferencesKey("email")
+
     }
 
     override val currentUserToken: Flow<String> = userDataStore.data.map{ preferences ->
@@ -62,15 +64,19 @@ class NetworkUserRepository(
 
     override suspend fun saveEmail(email: String){
         userDataStore.edit { preferences ->
-            preferences[USERNAME] = email
+            preferences[EMAIL] = email
         }
     }
+
+//    override fun updateUser(token: String, password: String): Call<GeneralResponseModel> {
+//        return userAPIService.updateUser(token, UserModel(password))
+//    }
 
     override fun logout(token: String): Call<GeneralResponseModel> {
         return userAPIService.logout(token)
     }
 
-    override fun deleteUser(token: String, userId: Int): Call<GeneralResponseModel> {
+    override fun deleteUser(token: String): Call<GeneralResponseModel> {
         return userAPIService.deleteUser(token)
     }
 

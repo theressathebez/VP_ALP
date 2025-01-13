@@ -17,10 +17,6 @@ import com.example.vp_alp.view.AccountView
 import com.example.vp_alp.view.ChangePassView
 import com.example.vp_alp.view.DelAccountView
 import com.example.vp_alp.view.FlashcardView
-import com.example.vp_alp.enums.listScreen
-import com.example.vp_alp.view.AccountView
-import com.example.vp_alp.view.ChangePassView
-import com.example.vp_alp.view.DelAccountView
 import com.example.vp_alp.view.LoginView
 import com.example.vp_alp.view.ProfileView
 import com.example.vp_alp.view.RegisterPreview
@@ -50,9 +46,6 @@ fun AppRouting(
     activity: Activity, viewModel: STTViewModel
 ) {
     val localContext = LocalContext.current
-    val token = userViewModel.token.collectAsState()
-
-val localContext = LocalContext.current
     val token = userViewModel.token.collectAsState()
 
     NavHost(

@@ -104,21 +104,6 @@ fun ProfileView(
                     .padding(start = 19.dp, top = 150.dp, bottom = 25.dp)
             ) {
                 Box (
-                        .fillMaxWidth()
-                        .zIndex(1f),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.group_410),
-                        contentDescription = "group_410",
-                        modifier = Modifier
-                            .size(105.dp)
-                            .offset(y = (107.dp), x = 2.dp)
-                    )
-                }
-                Surface (
-                    shadowElevation = 5.dp,
-                    shape = RoundedCornerShape(25.dp),
                     modifier = Modifier
                         .clip(RoundedCornerShape(25.dp))
                         .background(Color(0xFFF4F4F4))
@@ -128,10 +113,6 @@ fun ProfileView(
                     Box (
                         modifier = Modifier
                             .fillMaxHeight()
-                            .clip(RoundedCornerShape(25.dp))
-                            .background(Color(0xFFF4F4F4))
-                            .width(376.dp)
-                            .height(610.dp)
                     ) {
                         Column (
                             modifier = Modifier
@@ -179,12 +160,6 @@ fun ProfileView(
                                     .fillMaxHeight()
                                     .offset(y = 20.dp)
                             ) {
-                                Text(
-//                                    "",
-                                    text = username.value,
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                )
                                 Row (
                                     modifier = Modifier
                                         .padding(bottom = 10.dp)
@@ -218,16 +193,6 @@ fun ProfileView(
                                             .clickable {
                                                 navController.navigate(listScreen.Account.name)
                                             }
-                                            .size(65.dp)
-                                            .offset(y = (-20.dp), x = 2.dp)
-                                    )
-                                    Text(
-                                        "Beginner",
-                                        fontSize = 8.sp,
-                                        color = Color.White,
-                                        modifier = Modifier
-                                            .padding(top = 1.dp)
-                                            .offset(x = (-48.dp))
                                     )
                                 }
                                 Row (
@@ -267,14 +232,6 @@ fun ProfileView(
                                 }
                                 Row (
 
-                                        .size(355.dp)
-                                        .offset(y = (-215.dp))
-                                        .clickable { }
-                                )
-                                Column (
-                                    modifier = Modifier
-                                        .fillMaxHeight()
-                                        .offset(y = 20.dp)
                                 ) {
                                     Row (
                                         modifier = Modifier
@@ -294,11 +251,6 @@ fun ProfileView(
                                             color = Color(0xFF666666),
                                             modifier = Modifier
                                                 .padding(top = 3.dp, start = 15.dp)
-                                                .size(25.dp)
-                                                .offset(y = (-380.dp))
-                                                .clickable {
-                                                    navController.navigate(listScreen.Account.name)
-                                                }
                                         )
                                     }
                                     Image(
@@ -310,74 +262,7 @@ fun ProfileView(
                                             .clickable {
                                                 userViewModel.logoutUser(token, navController)
                                             }
-                                            .padding(bottom = 10.dp)
-                                    ) {
-                                        Row(
-                                            modifier = Modifier
-                                                .offset(x = (10.dp), y = (-370.dp))
-                                                .width(300.dp)
-                                        ) {
-                                            Image(
-                                                painter = painterResource(id = R.drawable.flashcard),
-                                                contentDescription = "flashcard",
-                                                modifier = Modifier
-                                                    .size(30.dp)
-                                            )
-                                            Text(
-                                                "Flashcard",
-                                                fontSize = 18.sp,
-                                                fontWeight = FontWeight.Medium,
-                                                color = Color(0xFF666666),
-                                                modifier = Modifier
-                                                    .padding(top = 4.dp, start = 15.dp)
-                                            )
-                                        }
-                                        Image(
-                                            painter = painterResource(id = R.drawable.arrow_right),
-                                            contentDescription = "arrow_right",
-                                            modifier = Modifier
-                                                .size(25.dp)
-                                                .offset(y = (-370.dp))
-                                                .clickable {
-                                                    navController.navigate(listScreen.UserFlashcard.name)
-                                                }
-                                        )
-                                    }
-                                    Row (
-
-                                    ) {
-                                        Row (
-                                            modifier = Modifier
-                                                .offset(x = (10.dp), y = (-360.dp))
-                                                .width(300.dp)
-                                        ) {
-                                            Image(
-                                                painter = painterResource(id = R.drawable.logout),
-                                                contentDescription = "logout",
-                                                modifier = Modifier
-                                                    .size(30.dp)
-                                            )
-                                            Text(
-                                                "Log Out",
-                                                fontSize = 18.sp,
-                                                fontWeight = FontWeight.Medium,
-                                                color = Color(0xFF666666),
-                                                modifier = Modifier
-                                                    .padding(top = 3.dp, start = 15.dp)
-                                            )
-                                        }
-                                        Image(
-                                            painter = painterResource(id = R.drawable.arrow_right),
-                                            contentDescription = "arrow_right",
-                                            modifier = Modifier
-                                                .size(25.dp)
-                                                .offset(y = (-360.dp))
-                                                .clickable {
-                                                    userViewModel.logoutUser(token, navController)
-                                                }
-                                        )
-                                    }
-
+                                    )
                                 }
 
                             }

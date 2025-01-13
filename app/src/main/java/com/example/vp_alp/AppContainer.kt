@@ -51,18 +51,6 @@ class DefaultAppContainer(
         NetworkStudyRepository(studyRetrofitService)
     }
 
-    private val authenticationRetrofitService: AuthenticationAPIService by lazy {
-        val retrofit = initRetrofit()
-
-        retrofit.create(AuthenticationAPIService::class.java)
-    }
-
-    private val userRetrofitService: UserAPIService by lazy {
-        val retrofit = initRetrofit()
-
-        retrofit.create(UserAPIService::class.java)
-    }
-
     // Passing in the required objects is called dependency injection (DI). It is also known as inversion of control.
     override val authenticationRepository: AuthenticationRepository by lazy {
         NetworkAuthenticationRepository(authenticationRetrofitService)

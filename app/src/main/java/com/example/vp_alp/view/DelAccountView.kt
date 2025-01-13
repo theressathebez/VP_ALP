@@ -63,7 +63,6 @@ fun DelAccountView(
     }
 //    when(dataStatus) {
 //        is ProfileDataStatusUIState.Success ->
-
     Column {
         Box {
             Image(

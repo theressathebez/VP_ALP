@@ -2,6 +2,7 @@ package com.example.vp_alp.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,10 +19,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -29,11 +32,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.vp_alp.R
+import com.example.vp_alp.enums.listScreen
+import com.example.vp_alp.viewmodel.UserViewModel
 
 
 @Composable
-fun AccountView() {
+fun AccountView(
+    userViewModel: UserViewModel,
+    navController: NavController
+) {
+    val email = userViewModel.email.collectAsState()
+
     Column {
         Box {
             Image(
@@ -41,8 +54,9 @@ fun AccountView() {
                 contentDescription = "background5",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(745.dp)
-                    .offset(y = (-2).dp)
+                    .height(800.dp)
+                    .offset(y = (-5).dp),
+                contentScale = ContentScale.Crop
             )
             Surface (
                 shadowElevation = 5.dp,
@@ -54,8 +68,8 @@ fun AccountView() {
                     modifier = Modifier
                         .clip(RoundedCornerShape(25.dp))
                         .background(Color(0xFFF4F4F4))
-                        .width(355.dp)
-                        .height(550.dp)
+                        .width(376.dp)
+                        .height(610.dp)
                 ) {
                     Column (
                         modifier = Modifier
@@ -104,7 +118,7 @@ fun AccountView() {
                                             .size(30.dp)
                                     )
                                     Text(
-                                        "leonsmith@gmail.com",
+                                        text = email.value,
                                         textDecoration = TextDecoration.Underline,
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Medium,
@@ -144,6 +158,9 @@ fun AccountView() {
                                     modifier = Modifier
                                         .size(25.dp)
                                         .offset(y = (-370.dp))
+                                        .clickable {
+                                            navController.navigate(listScreen.ChangePass.name)
+                                        }
                                 )
                             }
                             Row (
@@ -175,6 +192,9 @@ fun AccountView() {
                                     modifier = Modifier
                                         .size(25.dp)
                                         .offset(y = (-360.dp))
+                                        .clickable {
+                                            navController.navigate(listScreen.DelAccount.name)
+                                        }
                                 )
                             }
 
@@ -191,5 +211,8 @@ fun AccountView() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun AccountPreview() {
-    AccountView()
+    AccountView(
+        userViewModel = viewModel(factory = UserViewModel.Factory),
+        navController = rememberNavController()
+    )
 }

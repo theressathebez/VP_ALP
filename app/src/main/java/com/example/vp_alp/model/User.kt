@@ -1,4 +1,13 @@
 package com.example.vp_alp.model
 
-class User {
-}
+
+data class UserResponse (
+    val data: UserModel
+)
+
+data class UserModel (
+    val email: String,
+    val username: String,
+    val password: String,
+    val token: String?
+)

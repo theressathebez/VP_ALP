@@ -1,5 +1,5 @@
 package com.example.vp_alp.model
 
-data class GeneralResponseModel(
+class GeneralResponseModel (
     val data: String
 )
